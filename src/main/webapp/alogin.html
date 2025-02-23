@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+                font-family: Arial, sans-serif;
+                background-color: #002147;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+                flex-direction: column;
+                color: white;
+            }
+
+            form {
+                background: white;
+                padding: 25px;
+                border-radius: 8px;
+                box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+                width: 320px;
+                text-align: center;
+                color: #002147;
+            }
+
+            h2 {
+                color: #002147;
+                margin-bottom: 20px;
+            }
+
+            label {
+                display: block;
+                font-weight: bold;
+                margin-top: 10px;
+                text-align: left;
+            }
+
+            input {
+                width: 100%;
+                padding: 10px;
+                margin-top: 5px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                box-sizing: border-box;
+                font-size: 14px;
+            }
+
+            button {
+                width: 100%;
+                background-color: #002147;
+                color: white;
+                border: none;
+                padding: 10px;
+                margin-top: 15px;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 16px;
+                transition: 0.3s;
+            }
+
+            button:hover {
+                background-color: #004080;
+            }
+
+    </style>
+    <title>Admin Login</title>
+    <script>
+        function validateLogin() {
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+
+            if (username === "admin" && password === "admin1234") {
+                window.location.href = "admindashboard.html";
+                return false;
+            } else {
+                alert("Invalid username or password!");
+                return false;
+            }
+        }
+    </script>
+</head>
+<body>
+    <form onsubmit="return validateLogin()">
+        <h2>Admin Login</h2>
+        <label for="username">Username:</label>
+        <input type="text" id="username" required><br><br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" required><br><br>
+
+        <button type="submit">Login</button>
+    </form>
+</body>
+</html>
+

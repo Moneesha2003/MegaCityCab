@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sign Up - Mega City Cab</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #002147; /* Navy Blue Theme */
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+                flex-direction: column;
+                color: white;
+            }
+            .container {
+                background: white;
+                padding: 25px;
+                border-radius: 12px;
+                box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+                width: 350px;
+                text-align: center;
+                transition: 0.3s ease-in-out;
+            }
+            h2 {
+                color: #002147;
+                margin-bottom: 10px;
+                font-size: 22px;
+            }
+            input {
+                width: 90%;
+                padding: 12px;
+                margin: 8px 0;
+                border: 2px solid #ccc;
+                border-radius: 5px;
+                font-size: 16px;
+                outline: none;
+                transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            }
+            input:focus {
+                border-color: #004080;
+                box-shadow: 0px 0px 8px rgba(0, 33, 71, 0.5);
+            }
+            button {
+                width: 100%;
+                background-color: #002147;
+                color: white;
+                border: none;
+                padding: 12px;
+                margin-top: 10px;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 16px;
+                font-weight: bold;
+                transition: background-color 0.3s ease-in-out, transform 0.2s;
+            }
+            button:hover {
+                background-color: #004080;
+                transform: translateY(-2px);
+            }
+            .clear-btn {
+                background-color: #666;
+            }
+            .clear-btn:hover {
+                background-color: #444;
+            }
+            .message {
+                margin-top: 10px;
+                font-weight: bold;
+                font-size: 14px;
+            }
+            .message.success {
+                color: green;
+            }
+            .message.error {
+                color: red;
+            }
+            .signin-text {
+                margin-top: 15px;
+                font-size: 14px;
+                color: #555;
+                text-align: center;
+            }
+
+            .signin-text a {
+                color: #002147;
+                text-decoration: none;
+                font-weight: bold;
+            }
+
+            .signin-text a:hover {
+                text-decoration: underline;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h2>Sign Up</h2>
+            <input type="text" id="name" placeholder="Full Name">
+            <p id="nameError" class="message" style="color: red;"></p>
+
+            <input type="email" id="email" placeholder="Email">
+            <p id="emailError" class="message" style="color: red;"></p>
+
+            <input type="text" id="contact" placeholder="Contact Number">
+            <p id="contactError" class="message" style="color: red;"></p>
+
+            <input type="password" id="password" placeholder="Password">
+            <p id="passwordError" class="message" style="color: red;"></p>
+
+            <button onclick="signup()">Sign Up</button>
+            <button class="clear-btn" onclick="clearForm()">Clear</button>
+
+            <p class="message" id="message"></p>
+
+            <p class="signin-text">Already have an account? <a href="signin.html">Sign In</a></p>
+        </div>
+
+        <script>
+            function validateForm(name, email, contact, password) {
+                let isValid = true;
+
+                // Name validation (Only letters & spaces, min 3 characters)
+                if (!/^[A-Za-z\s]{3,}$/.test(name)) {
+                    document.getElementById('nameError').innerText = "Enter a valid name (Min 3 letters).";
+                    isValid = false;
+                } else {
+                    document.getElementById('nameError').innerText = "";
+                }
+
+                // Email validation
+                if (!/^\S+@\S+\.\S+$/.test(email)) {
+                    document.getElementById('emailError').innerText = "Enter a valid email.";
+                    isValid = false;
+                } else {
+                    document.getElementById('emailError').innerText = "";
+                }
+
+                // Contact Number validation (Only numbers, min 10 digits)
+                if (!/^\d{10,}$/.test(contact)) {
+                    document.getElementById('contactError').innerText = "Enter a valid contact number (Min 10 digits).";
+                    isValid = false;
+                } else {
+                    document.getElementById('contactError').innerText = "";
+                }
+
+                // Password validation (Min 6 chars, 1 uppercase, 1 number, 1 special char)
+                if (!/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/.test(password)) {
+                    document.getElementById('passwordError').innerText = "Min 6 chars, 1 uppercase, 1 number, 1 special char.";
+                    isValid = false;
+                } else {
+                    document.getElementById('passwordError').innerText = "";
+                }
+
+                return isValid;
+            }
+
+            function signup() {
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const contact = document.getElementById('contact').value;
+    const password = document.getElementById('password').value;
+    const message = document.getElementById('message');
+
+    if (!validateForm(name, email, contact, password)) {
+        message.style.color = "red";
+        message.innerText = "Please fix the errors above.";
+        return;
+    }
+
+    const customer = { name, email, contact, password };
+
+    fetch('http://localhost:8080/MegaCityService/resources/customers', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(customer)
+    })
+    .then(response => {
+        if (response.status === 201) {
+            message.style.color = "green";
+            message.innerText = "Sign up successful!";
+        } else {
+            message.style.color = "red";
+            message.innerText = "Sign up failed. Try again.";
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        message.style.color = "red";
+        message.innerText = "An error occurred.";
+    });
+}
+
+
+            function clearForm() {
+                document.getElementById('name').value = "";
+                document.getElementById('email').value = "";
+                document.getElementById('contact').value = "";
+                document.getElementById('password').value = "";
+                document.getElementById('message').innerText = "";
+                document.getElementById('nameError').innerText = "";
+                document.getElementById('emailError').innerText = "";
+                document.getElementById('contactError').innerText = "";
+                document.getElementById('passwordError').innerText = "";
+            }
+        </script>
+    </body>
+</html>

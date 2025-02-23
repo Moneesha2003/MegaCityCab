@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Login - Mega City Cab</title>
+        <style>
+           body {
+                font-family: Arial, sans-serif;
+                background-color: #002147; /* Navy Blue Theme */
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+                flex-direction: column;
+                color: white;
+            }
+            .container {
+                background: white;
+                padding: 25px;
+                border-radius: 12px;
+                box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+                width: 350px;
+                text-align: center;
+                transition: 0.3s ease-in-out;
+            }
+            h2 {
+                color: #002147;
+                margin-bottom: 10px;
+                font-size: 22px;
+            }
+            input {
+                width: 90%;
+                padding: 12px;
+                margin: 8px 0;
+                border: 2px solid #ccc;
+                border-radius: 5px;
+                font-size: 16px;
+                outline: none;
+                transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            }
+            input:focus {
+                border-color: #004080;
+                box-shadow: 0px 0px 8px rgba(0, 33, 71, 0.5);
+            }
+            button {
+                width: 100%;
+                background-color: #002147;
+                color: white;
+                border: none;
+                padding: 12px;
+                margin-top: 10px;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 16px;
+                font-weight: bold;
+                transition: background-color 0.3s ease-in-out, transform 0.2s;
+            }
+            button:hover {
+                background-color: #004080;
+                transform: translateY(-2px);
+            }
+            .clear-btn {
+                background-color: #666;
+            }
+            .clear-btn:hover {
+                background-color: #444;
+            }
+            .message {
+                margin-top: 10px;
+                font-weight: bold;
+                font-size: 14px;
+            }
+            .message.success {
+                color: green;
+            }
+            .message.error {
+                color: red;
+            }
+            .signup-text {
+                margin-top: 15px;
+                font-size: 14px;
+                color: #555;
+                text-align: center;
+            }
+
+            .signup-text a {
+                color: #002147;
+                text-decoration: none;
+                font-weight: bold;
+            }
+
+            .signup-text a:hover {
+                text-decoration: underline;
+            }
+        </style>
+    </head>
+    <body>
+
+        <div class="container">
+            <h2>Login</h2>
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button onclick="login()">Login</button>
+            <p id="message" class="message"></p>
+            <p class="signup-text">Don't have an account? <a href="signup.html">Sign Up</a></p>
+        </div>
+
+        <script>
+            function login() {
+                const email = document.getElementById("email").value;
+                const password = document.getElementById("password").value;
+                const message = document.getElementById("message");
+
+                if (!email || !password) {
+                    message.textContent = "Please fill in all fields.";
+                    return;
+                }
+
+                fetch("http://localhost:8080/MegaCity/api/customers/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({email, password})
+                })
+                        .then(response => response.json().then(data => ({status: response.status, data})))
+                        .then(result => {
+                            if (result.status === 200) {
+                                localStorage.setItem("customer", JSON.stringify(result.data));
+                                message.style.color = "green";
+                                message.textContent = "Login successful! Redirecting...";
+                                setTimeout(() => {
+                                    window.location.href = "homepage.html"; // Change to your actual dashboard page
+                                }, 1500);
+                            } else {
+                                message.style.color = "red";
+                                message.textContent = result.data.message || "Invalid email or password.";
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error:", error);
+                            message.textContent = "An error occurred. Please try again.";
+                        });
+            }
+        </script>
+
+    </body>
+</html>
