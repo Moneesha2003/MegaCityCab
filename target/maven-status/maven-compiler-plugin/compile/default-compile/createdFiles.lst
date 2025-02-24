@@ -1,5 +1,7 @@
+com\mycompany\megacityservice\resources\BookingService.class
 com\mycompany\megacityservice\resources\JakartaEE8Resource.class
 db\Customer.class
+db\Booking.class
 com\mycompany\megacityservice\JakartaRestConfiguration.class
 com\mycompany\megacityservice\resources\CustomerService.class
 db\DBUtils.class

@@ -119,6 +119,55 @@ public class DBUtils {
         return false;
     }
     
+    public boolean addBooking(Booking booking) {
+        String query = "INSERT INTO bookings (pickup_location, dropoff_location, passengers, vehicle_type, distance_km, price, status) VALUES (?, ?, ?, ?, ?, ?, 'Pending')";
+        
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+             
+            stmt.setString(1, booking.getPickupLocation());
+            stmt.setString(2, booking.getDropoffLocation());
+            stmt.setInt(3, booking.getPassengers());
+            stmt.setString(4, booking.getVehicleType());
+            stmt.setDouble(5, booking.getDistanceKm());
+            stmt.setDouble(6, booking.getPrice());
+
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    public List<Booking> getBookings() {
+    List<Booking> bookings = new ArrayList<>();
+    String query = "SELECT * FROM bookings";
+    
+    try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+         Statement stmt = conn.createStatement();
+         ResultSet rs = stmt.executeQuery(query)) {
+        while (rs.next()) {
+            Booking booking = new Booking(
+                rs.getString("pickup_location"),
+                rs.getString("dropoff_location"),
+                rs.getInt("passengers"),
+                rs.getString("vehicle_type"),
+                rs.getDouble("distance_km"),  // Fixed column name
+                rs.getDouble("price"),
+                rs.getString("status") // Added status if needed
+            );
+            bookings.add(booking);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    
+    return bookings;
+}
+
+    
 //    public Pricing getPrice(String vehicle_type) throws SQLException {
 //        Pricing pr = null;
 //        String query = "SELECT * FROM pricing WHERE vehicle_type = ?";

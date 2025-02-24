@@ -9,6 +9,8 @@ import db.Customer;
 import db.DBUtils;
 import java.sql.SQLException;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -17,6 +19,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.mindrot.jbcrypt.BCrypt;
@@ -132,32 +135,37 @@ public class CustomerService {
     }
 
     @POST
-    @Path("login")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response login(String json) {
-        Gson gson = new Gson();
-        Customer loginRequest = gson.fromJson(json, Customer.class);
+@Path("login")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
+public Response login(String json, @Context HttpServletRequest request) {  // Add @Context to get the HttpServletRequest
+    Gson gson = new Gson();
+    Customer loginRequest = gson.fromJson(json, Customer.class);
 
-        String email = loginRequest.getEmail();
-        String password = loginRequest.getPassword();
+    String email = loginRequest.getEmail();
+    String password = loginRequest.getPassword();
 
-        DBUtils utils = new DBUtils();
-        try {
-            Customer customer = utils.getCustomer(email);
-            if (customer == null) {
-                return Response.status(404).entity("{\"message\":\"User not found\"}").build();
-            }
-
-            // Verify hashed password
-            if (BCrypt.checkpw(password, customer.getPassword())) {
-                return Response.status(200).entity(gson.toJson(customer)).build();
-            } else {
-                return Response.status(401).entity("{\"message\":\"Invalid credentials\"}").build();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return Response.status(500).entity("{\"message\":\"Server error\"}").build();
+    DBUtils utils = new DBUtils();
+    try {
+        Customer customer = utils.getCustomer(email);
+        if (customer == null) {
+            return Response.status(404).entity("{\"message\":\"User not found\"}").build();
         }
+
+        // Verify hashed password
+        if (BCrypt.checkpw(password, customer.getPassword())) {
+            // Successful login: store user email in the session
+            HttpSession session = request.getSession();
+            session.setAttribute("userEmail", customer.getEmail());  // Save the email in the session
+
+            return Response.status(200).entity(gson.toJson(customer)).build();
+        } else {
+            return Response.status(401).entity("{\"message\":\"Invalid credentials\"}").build();
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return Response.status(500).entity("{\"message\":\"Server error\"}").build();
     }
+}
+
 }
