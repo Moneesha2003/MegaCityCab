@@ -118,7 +118,7 @@
                     return;
                 }
 
-                fetch("http://localhost:8080/MegaCity/api/customers/login", {
+                fetch("http://localhost:8080/MegaCityService/resources/customers/login", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -132,7 +132,7 @@
                                 message.style.color = "green";
                                 message.textContent = "Login successful! Redirecting...";
                                 setTimeout(() => {
-                                    window.location.href = "homepage.html"; // Change to your actual dashboard page
+                                    window.location.href = "bookingStep1.html"; 
                                 }, 1500);
                             } else {
                                 message.style.color = "red";
