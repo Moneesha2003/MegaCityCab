@@ -179,6 +179,7 @@
                 <a href="car_driver.html">Car & Driver</a>
                 <a href="help.html">Help</a>
                 <a href="signin.html">Login</a>
+                <a href="MyProfile.html" id="accountsLink" style="display: none;">Accounts</a>
             </div>
         </nav>
 
@@ -192,11 +193,19 @@
             </div>
 
         </div>
+        <script>
+            // Check if user is logged in
+            const loggedInUser = localStorage.getItem("loggedInUser"); // Example storage method
+            if (loggedInUser) {
+                document.getElementById("accountsLink").style.display = "inline-block";
+            }
+        </script>
 
         <!-- Features Section -->
         <section class="features">
             <h2>Our Features</h2>
-            <div class="card">                <i class="fas fa-taxi"></i>
+            <div class="card">                
+                <i class="fas fa-taxi"></i>
                 <h3>Easy Booking</h3>
                 <p>Quick and simple online booking for all your transportation needs.</p>
             </div>
@@ -217,7 +226,7 @@
             <p>&copy; 2025 Mega City Cab. All Rights Reserved. | <a href="help.html">Help</a></p>
         </footer>
 
-        
+
     </body>
 
 </html>

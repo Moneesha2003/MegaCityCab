@@ -108,6 +108,12 @@
 
             <input type="text" id="contact" placeholder="Contact Number">
             <p id="contactError" class="message" style="color: red;"></p>
+            
+            <input type="text" id="address" placeholder="Address">
+            <p id="addressError" class="message" style="color: red;"></p>
+            
+            <input type="text" id="NIC" placeholder="NIC">
+            <p id="NICError" class="message" style="color: red;"></p>
 
             <input type="password" id="password" placeholder="Password">
             <p id="passwordError" class="message" style="color: red;"></p>
@@ -121,7 +127,7 @@
         </div>
 
         <script>
-            function validateForm(name, email, contact, password) {
+            function validateForm(name, email, contact, address, NIC, password) {
                 let isValid = true;
 
                 // Name validation (Only letters & spaces, min 3 characters)
@@ -147,6 +153,22 @@
                 } else {
                     document.getElementById('contactError').innerText = "";
                 }
+                
+                // Address validation (Only letters & spaces, min 3 characters)
+                if (!/^[A-Za-z\s]{3,}$/.test(address)) {
+                    document.getElementById('addressError').innerText = "Enter a valid address (Min 3 letters).";
+                    isValid = false;
+                } else {
+                    document.getElementById('addressError').innerText = "";
+                }
+                
+                // NIC validation (Only numbers, min 12 digits)
+                if (!/^\d{12,}$/.test(NIC)) {
+                    document.getElementById('NICError').innerText = "Enter a valid NIC (Min 12 digits).";
+                    isValid = false;
+                } else {
+                    document.getElementById('NICError').innerText = "";
+                }
 
                 // Password validation (Min 6 chars, 1 uppercase, 1 number, 1 special char)
                 if (!/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/.test(password)) {
@@ -163,16 +185,18 @@
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
     const contact = document.getElementById('contact').value;
+    const address = document.getElementById('address').value;
+    const NIC = document.getElementById('NIC').value;
     const password = document.getElementById('password').value;
     const message = document.getElementById('message');
 
-    if (!validateForm(name, email, contact, password)) {
+    if (!validateForm(name, email, contact, address, NIC, password)) {
         message.style.color = "red";
         message.innerText = "Please fix the errors above.";
         return;
     }
 
-    const customer = { name, email, contact, password };
+    const customer = { name, email, contact, address, NIC, password };
 
     fetch('http://localhost:8080/MegaCityService/resources/customers', {
         method: 'POST',
@@ -202,11 +226,15 @@
                 document.getElementById('name').value = "";
                 document.getElementById('email').value = "";
                 document.getElementById('contact').value = "";
+                document.getElementById('address').value = "";
+                document.getElementById('NIC').value = "";
                 document.getElementById('password').value = "";
                 document.getElementById('message').innerText = "";
                 document.getElementById('nameError').innerText = "";
                 document.getElementById('emailError').innerText = "";
                 document.getElementById('contactError').innerText = "";
+                document.getElementById('addressError').innerText = "";
+                document.getElementById('NICError').innerText = "";
                 document.getElementById('passwordError').innerText = "";
             }
         </script>
