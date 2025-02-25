@@ -12,19 +12,25 @@ public class Customer {
     private String name;
     private String email;
     private String contact;
+    private String address;
+    private String NIC;
     private String password;
 
     public Customer() {
         this.name = "";
         this.email = "";
         this.contact = "";
+        this.address = "";
+        this.NIC = "";
         this.password = "";
     }
     
-    public Customer(String name, String email, String contact, String password) {
+    public Customer(String name, String email, String contact, String address, String NIC, String password) {
         this.name = name;
         this.email = email;
         this.contact = contact;
+        this.address = address;
+        this.NIC = NIC;
         this.password = password;
     }
 
@@ -50,6 +56,22 @@ public class Customer {
 
     public void setContact(String contact) {
         this.contact = contact;
+    }
+    
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+    
+    public String getNIC() {
+        return NIC;
+    }
+
+    public void setNIC(String NIC) {
+        this.NIC = NIC;
     }
 
     public String getPassword() {

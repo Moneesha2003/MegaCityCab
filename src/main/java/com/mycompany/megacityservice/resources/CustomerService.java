@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.megacityservice.resources;
 
 import com.google.gson.Gson;
@@ -24,12 +20,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.mindrot.jbcrypt.BCrypt;
 
-/**
- *
- * @author monee
- */
 @Path("customers")
 public class CustomerService {
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCustomers() {
@@ -135,37 +128,37 @@ public class CustomerService {
     }
 
     @POST
-@Path("login")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
-public Response login(String json, @Context HttpServletRequest request) {  // Add @Context to get the HttpServletRequest
-    Gson gson = new Gson();
-    Customer loginRequest = gson.fromJson(json, Customer.class);
+    @Path("login")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response login(String json, @Context HttpServletRequest request) {  // Add @Context to get the HttpServletRequest
+        Gson gson = new Gson();
+        Customer loginRequest = gson.fromJson(json, Customer.class);
 
-    String email = loginRequest.getEmail();
-    String password = loginRequest.getPassword();
+        String email = loginRequest.getEmail();
+        String password = loginRequest.getPassword();
 
-    DBUtils utils = new DBUtils();
-    try {
-        Customer customer = utils.getCustomer(email);
-        if (customer == null) {
-            return Response.status(404).entity("{\"message\":\"User not found\"}").build();
+        DBUtils utils = new DBUtils();
+        try {
+            Customer customer = utils.getCustomer(email);
+            if (customer == null) {
+                return Response.status(404).entity("{\"message\":\"User not found\"}").build();
+            }
+
+            // Verify hashed password
+            if (BCrypt.checkpw(password, customer.getPassword())) {
+                // Successful login: store user email in the session
+                HttpSession session = request.getSession();
+                session.setAttribute("userEmail", customer.getEmail());  // Save the email in the session
+
+                return Response.status(200).entity(gson.toJson(customer)).build();
+            } else {
+                return Response.status(401).entity("{\"message\":\"Invalid credentials\"}").build();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return Response.status(500).entity("{\"message\":\"Server error\"}").build();
         }
-
-        // Verify hashed password
-        if (BCrypt.checkpw(password, customer.getPassword())) {
-            // Successful login: store user email in the session
-            HttpSession session = request.getSession();
-            session.setAttribute("userEmail", customer.getEmail());  // Save the email in the session
-
-            return Response.status(200).entity(gson.toJson(customer)).build();
-        } else {
-            return Response.status(401).entity("{\"message\":\"Invalid credentials\"}").build();
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
-        return Response.status(500).entity("{\"message\":\"Server error\"}").build();
     }
-}
 
 }

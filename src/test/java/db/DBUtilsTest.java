@@ -40,7 +40,7 @@ public class DBUtilsTest {
 
     @Test
 public void testGetCustomer() throws Exception {
-    Customer expResult = new Customer("Carlos Sainz", "test@gmail.com", "0775869656", "test123");
+    Customer expResult = new Customer("Carlos Sainz", "test@gmail.com", "0775869656", "Kahathuduwa", "200385112828", "test123");
     DBUtils instance = new DBUtils();
 
     // Step 1: Add test customer
@@ -53,6 +53,8 @@ public void testGetCustomer() throws Exception {
     assertEquals(expResult.getName(), result.getName(), "Name mismatch");
     assertEquals(expResult.getEmail(), result.getEmail(), "Email mismatch");
     assertEquals(expResult.getContact(), result.getContact(), "Contact mismatch");
+    assertEquals(expResult.getAddress(),result.getAddress(),"Address mismatch");
+    assertEquals(expResult.getNIC(),result.getNIC(),"NIC mismatch");
     assertEquals(expResult.getPassword(), result.getPassword(), "Password mismatch");
 
     // Step 3: Cleanup - Delete customer
@@ -78,7 +80,7 @@ public void testGetCustomer() throws Exception {
     @Test
     public void testAddCustomers() {
         System.out.println("addCustomer");
-        Customer cr = new Customer("Test User", "test@example.com", "0771234567", "password123");
+        Customer cr = new Customer("Test User", "test@example.com", "0771234567", "Piliyandala", "200565336996", "password123");
         DBUtils instance = new DBUtils();
 
         boolean result = instance.addCustomers(cr);
@@ -91,7 +93,7 @@ public void testGetCustomer() throws Exception {
     @Test
     public void testUpdateCustomers() {
         System.out.println("updateCustomer");
-        Customer cr = new Customer("Old Name", "update@example.com", "0770000000", "oldpass");
+        Customer cr = new Customer("Old Name", "update@example.com", "0770000000", "Kohuwala", "200185694545", "oldpass");
         DBUtils instance = new DBUtils();
 
         // Add customer first
@@ -113,7 +115,7 @@ public void testGetCustomer() throws Exception {
         DBUtils instance = new DBUtils();
 
         // Add a test customer first
-        Customer cr = new Customer("Delete Me", "delete@example.com", "0779999999", "deletepass");
+        Customer cr = new Customer("Delete Me", "delete@example.com", "0779999999", "Kesbewa", "200456854242", "deletepass");
         instance.addCustomers(cr);
 
         // Delete the customer
