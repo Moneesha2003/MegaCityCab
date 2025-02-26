@@ -84,6 +84,7 @@
 </head>
 <body>
     <h2>Cab Booking</h2>
+    <h3 id="welcomeMessage">Hi, <span id="name"></span></h3>
     <form id="bookingForm">
         <label>Pickup Location:</label>
         <input type="text" id="pickupLocation" required><br>
@@ -110,6 +111,18 @@
     </div>
 
     <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch("http://localhost:8080/MegaCityService/resources/customers/currentUser")
+                .then(response => response.json())
+                .then(data => {
+                    if (data.name) {
+                        document.getElementById("name").textContent = data.name;
+                    } else {
+                        document.getElementById("welcomeMessage").textContent = "Hi, Guest";
+                    }
+                })
+                .catch(error => console.error("Error fetching user:", error));
+        });
         document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("bookingForm").addEventListener("submit", function (event) {
                 event.preventDefault();
