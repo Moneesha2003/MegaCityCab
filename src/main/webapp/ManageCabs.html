@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Manage Cabs - Mega City Cab</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #002147; /* Navy Blue Theme */
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+                flex-direction: column;
+                color: white;
+            }
+            .container {
+                background: white;
+                padding: 25px;
+                border-radius: 12px;
+                box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+                width: 350px;
+                text-align: center;
+                transition: 0.3s ease-in-out;
+            }
+            h2 {
+                color: #002147;
+                margin-bottom: 10px;
+                font-size: 22px;
+            }
+            input, select {
+                width: 90%;
+                padding: 12px;
+                margin: 8px 0;
+                border: 2px solid #ccc;
+                border-radius: 5px;
+                font-size: 16px;
+                outline: none;
+                transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            }
+            input:focus, select:focus {
+                border-color: #004080;
+                box-shadow: 0px 0px 8px rgba(0, 33, 71, 0.5);
+            }
+            button {
+                width: 100%;
+                background-color: #002147;
+                color: white;
+                border: none;
+                padding: 12px;
+                margin-top: 10px;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 16px;
+                font-weight: bold;
+                transition: background-color 0.3s ease-in-out, transform 0.2s;
+            }
+            button:hover {
+                background-color: #004080;
+                transform: translateY(-2px);
+            }
+            .clear-btn {
+                background-color: #666;
+            }
+            .clear-btn:hover {
+                background-color: #444;
+            }
+            .message {
+                margin-top: 10px;
+                font-weight: bold;
+                font-size: 14px;
+            }
+            .message.success {
+                color: green;
+            }
+            .message.error {
+                color: red;
+            }
+            .signin-text {
+                margin-top: 15px;
+                font-size: 14px;
+                color: #555;
+                text-align: center;
+            }
+
+            .signin-text a {
+                color: #002147;
+                text-decoration: none;
+                font-weight: bold;
+            }
+
+            .signin-text a:hover {
+                text-decoration: underline;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h2>Manage Cabs</h2>
+            
+            <input type="text" id="vehicle" placeholder="Vehicle Name">
+            <p id="vehicleError" class="message" style="color: red;"></p>
+
+            <input type="number" id="passengers" placeholder="Passenger Capacity">
+            <p id="passengersError" class="message" style="color: red;"></p>
+
+            <input type="text" id="number" placeholder="Vehicle Number">
+            <p id="numberError" class="message" style="color: red;"></p>
+
+            <input type="text" id="driver" placeholder="Driver Name">
+            <p id="driverError" class="message" style="color: red;"></p>
+
+            <button onclick="addCab()">Add Cab</button>
+            <button class="clear-btn" onclick="clearForm()">Clear</button>
+
+            <p class="message" id="message"></p>
+
+            <p class="signin-text">Manage existing cabs? <a href="viewCabs.html">View Cabs</a></p>
+        </div>
+
+        <script>
+            function validateForm(vehicle, passengers, number, driver) {
+                let isValid = true;
+
+                // Vehicle validation (Min 3 characters)
+                if (!/^[A-Za-z\s]{3,}$/.test(vehicle)) {
+                    document.getElementById('vehicleError').innerText = "Enter a valid vehicle name (Min 3 letters).";
+                    isValid = false;
+                } else {
+                    document.getElementById('vehicleError').innerText = "";
+                }
+
+                // Passengers validation (Only numbers, min 1)
+                if (!/^\d{1,}$/.test(passengers)) {
+                    document.getElementById('passengersError').innerText = "Enter a valid number of passengers.";
+                    isValid = false;
+                } else {
+                    document.getElementById('passengersError').innerText = "";
+                }
+
+                // Vehicle Number validation (Min 4 characters)
+                if (!/^[A-Za-z0-9]{4,}$/.test(number)) {
+                    document.getElementById('numberError').innerText = "Enter a valid vehicle number (Min 4 characters).";
+                    isValid = false;
+                } else {
+                    document.getElementById('numberError').innerText = "";
+                }
+
+                // Driver validation (Min 3 characters)
+                if (!/^[A-Za-z\s]{3,}$/.test(driver)) {
+                    document.getElementById('driverError').innerText = "Enter a valid driver name (Min 3 letters).";
+                    isValid = false;
+                } else {
+                    document.getElementById('driverError').innerText = "";
+                }
+
+                return isValid;
+            }
+
+            function addCab() {
+                const vehicle = document.getElementById('vehicle').value;
+                const passengers = document.getElementById('passengers').value;
+                const number = document.getElementById('number').value;
+                const driver = document.getElementById('driver').value;
+                const message = document.getElementById('message');
+
+                if (!validateForm(vehicle, passengers, number, driver)) {
+                    message.style.color = "red";
+                    message.innerText = "Please fix the errors above.";
+                    return;
+                }
+
+                const cab = { vehicle, passengers, number, driver };
+
+                fetch('http://localhost:8080/MegaCityService/resources/cabs', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(cab)
+                })
+                .then(response => {
+                    if (response.status === 201) {
+                        message.style.color = "green";
+                        message.innerText = "Cab added successfully!";
+                    } else {
+                        message.style.color = "red";
+                        message.innerText = "Failed to add cab. Try again.";
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    message.style.color = "red";
+                    message.innerText = "An error occurred.";
+                });
+            }
+
+            function clearForm() {
+                document.getElementById('vehicle').value = "";
+                document.getElementById('passengers').value = "";
+                document.getElementById('number').value = "";
+                document.getElementById('driver').value = "";
+                document.getElementById('message').innerText = "";
+                document.getElementById('vehicleError').innerText = "";
+                document.getElementById('passengersError').innerText = "";
+                document.getElementById('numberError').innerText = "";
+                document.getElementById('driverError').innerText = "";
+            }
+        </script>
+    </body>
+</html>
