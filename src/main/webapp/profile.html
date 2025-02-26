@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Profile - Mega City Cab</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #002147;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+            width: 350px;
+            text-align: center;
+            color: black;
+        }
+        h2 {
+            color: #002147;
+            margin-bottom: 10px;
+        }
+        .profile-info {
+            text-align: left;
+            margin-top: 15px;
+        }
+        .profile-info p {
+            font-size: 16px;
+            margin: 5px 0;
+        }
+        .logout-btn, .edit-btn, .update-btn {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        .logout-btn { background-color: #c9302c; color: white; }
+        .logout-btn:hover { background-color: #d9534f; }
+        .edit-btn { background-color: #002147; color: white; }
+        .update-btn { background-color: yellowgreen; color: white; display: none; }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Customer Profile</h2>
+        <form id="profileForm">
+            <label for="name">Name:</label>
+            <input type="text" id="name" disabled>
+            
+            <label for="email">Email:</label>
+            <input type="email" id="email" disabled>
+            
+            <label for="contact">Contact:</label>
+            <input type="text" id="contact" disabled>
+            
+            <label for="address">Address:</label>
+            <input type="text" id="address" disabled>
+            
+            <label for="nic">NIC:</label>
+            <input type="text" id="nic" disabled>
+            
+            <button type="button" class="edit-btn" onclick="enableEdit()">Edit</button>
+            <button type="button" class="update-btn" onclick="updateProfile()">Update</button>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            loadProfile();
+        });
+
+        function loadProfile() {
+            const customer = JSON.parse(localStorage.getItem("customer"));
+            if (!customer) {
+                window.location.href = "signin.html"; // Redirect if not logged in
+            } else {
+                document.getElementById("name").value = customer.name;
+                document.getElementById("email").value = customer.email;
+                document.getElementById("contact").value = customer.contact;
+                document.getElementById("address").value = customer.address;
+                document.getElementById("nic").value = customer.NIC;
+            }
+        }
+
+        function enableEdit() {
+            document.querySelectorAll("input").forEach(input => input.disabled = false);
+            document.querySelector(".edit-btn").style.display = "none";
+            document.querySelector(".update-btn").style.display = "inline-block";
+        }
+
+        function updateProfile() {
+            let updatedCustomer = {
+                name: document.getElementById("name").value,
+                email: document.getElementById("email").value,
+                contact: document.getElementById("contact").value,
+                address: document.getElementById("address").value,
+                NIC: document.getElementById("nic").value
+            };
+            localStorage.setItem("customer", JSON.stringify(updatedCustomer));
+            alert("Profile updated successfully!");
+            document.querySelectorAll("input").forEach(input => input.disabled = true);
+            document.querySelector(".edit-btn").style.display = "inline-block";
+            document.querySelector(".update-btn").style.display = "none";
+        }
+
+        function logout() {
+            localStorage.removeItem("customer");
+            window.location.href = "signin.html";
+        }
+    </script>
+</body>
+</html>
