@@ -126,4 +126,22 @@ public void testGetCustomer() throws Exception {
         Customer check = instance.getCustomer(cr.getEmail());
         assertNull(check);
     }
+//    @Test
+//    public void testAddVehicle() {
+//        System.out.println("addVehicle");
+//        ManageCabs cabs = new ManageCabs("Test Vehicle", 4, "WP 1220", "Test");
+//        DBUtils instance = new DBUtils();
+//
+//        boolean result = instance.addVehicle(cabs);
+//        assertTrue(result);
+//    }
+//    @Test
+//    public void testGetCabs() {
+//        System.out.println("getCabs");
+//        DBUtils instance = new DBUtils();
+//        List<ManageCabs> result = instance.getCabs();
+//
+//        assertNotNull(result);
+//        assertTrue(result.size() >= 0);
+//    }
 }

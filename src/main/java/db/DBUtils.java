@@ -100,7 +100,7 @@ public class DBUtils {
             DriverManager.registerDriver(new com.mysql.jdbc.Driver());
 
             try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS); Statement stmt = conn.createStatement();) {
-                stmt.executeUpdate("UPDATE customers SET name = '" + cr.getName() + "',contact = '" + cr.getContact() + "',address = '" + cr.getAddress()+ "',NIC = '" + cr.getNIC() + "',password = '" + cr.getPassword() + "' WHERE (email = '" + cr.getEmail() + "');");
+                stmt.executeUpdate("UPDATE customers SET name = '" + cr.getName() + "',contact = '" + cr.getContact() + "',address = '" + cr.getAddress() + "',NIC = '" + cr.getNIC() + "',password = '" + cr.getPassword() + "' WHERE (email = '" + cr.getEmail() + "');");
                 return true;
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -167,5 +167,43 @@ public class DBUtils {
         }
 
         return bookings;
+    }
+
+    public boolean addVehicle(ManageCabs cab) {
+        String query = "INSERT INTO cabs (vehicle, passengers, number, driver) VALUES (?, ?, ?, ?)";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS); PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, cab.getVehicle());
+            stmt.setInt(2, cab.getPassengers());
+            stmt.setString(3, cab.getNumber());
+            stmt.setString(4, cab.getDriver());
+
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public List<ManageCabs> getCabs() {
+        List<ManageCabs> cabs = new ArrayList<>();
+        String query = "SELECT * FROM cabs";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
+            while (rs.next()) {
+                ManageCabs cab = new ManageCabs(
+                        rs.getString("vehicle"),
+                        rs.getInt("passengers"),
+                        rs.getString("number"),
+                        rs.getString("driver")
+                );
+                cabs.add(cab);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return cabs;
     }
 }
