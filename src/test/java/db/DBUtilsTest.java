@@ -129,7 +129,7 @@ public void testGetCustomer() throws Exception {
 //    @Test
 //    public void testAddVehicle() {
 //        System.out.println("addVehicle");
-//        ManageCabs cabs = new ManageCabs("Test Vehicle", 4, "WP 1220", "Test");
+//        ManageCabs cabs = new ManageCabs("Test Vehicle", 4, "WP 1220");
 //        DBUtils instance = new DBUtils();
 //
 //        boolean result = instance.addVehicle(cabs);

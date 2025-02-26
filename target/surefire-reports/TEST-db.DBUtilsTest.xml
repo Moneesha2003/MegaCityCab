@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="db.DBUtilsTest" time="0.561" tests="7" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="db.DBUtilsTest" time="1.079" tests="5" errors="0" skipped="0" failures="0">
   <properties>
     <property name="sun.desktop" value="windows"/>
     <property name="awt.toolkit" value="sun.awt.windows.WToolkit"/>
+    <property name="netbeans.deploy" value="true"/>
     <property name="file.encoding.pkg" value="sun.io"/>
     <property name="java.specification.version" value="1.8"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -11,6 +12,7 @@
     <property name="java.vm.vendor" value="Azul Systems, Inc."/>
     <property name="sun.arch.data.model" value="64"/>
     <property name="user.variant" value=""/>
+    <property name="exec.appArgs" value=""/>
     <property name="java.vendor.url" value="http://www.azul.com/"/>
     <property name="user.timezone" value="Asia/Colombo"/>
     <property name="java.vm.specification.version" value="1.8"/>
@@ -18,9 +20,9 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="US"/>
     <property name="sun.boot.library.path" value="C:\Users\monee\Documents\NetBeansJDKs\zulu8.84.0.15-ca-jdk8.0.442-win_x64\zulu8.84.0.15-ca-jdk8.0.442-win_x64\jre\bin"/>
-    <property name="sun.java.command" value="C:\Users\monee\AppData\Local\Temp\surefire1598286352147873692\surefirebooter-20250226111807850_3.jar C:\Users\monee\AppData\Local\Temp\surefire1598286352147873692 2025-02-26T11-18-07_200-jvmRun1 surefire-20250226111807850_1tmp surefire_0-20250226111807850_2tmp"/>
-    <property name="test" value="db.DBUtilsTest"/>
+    <property name="sun.java.command" value="C:\Users\monee\AppData\Local\Temp\surefire2374140100344048695\surefirebooter-20250226130553791_3.jar C:\Users\monee\AppData\Local\Temp\surefire2374140100344048695 2025-02-26T13-05-53_350-jvmRun1 surefire-20250226130553791_1tmp surefire_0-20250226130553791_2tmp"/>
     <property name="surefire.test.class.path" value="C:\Users\monee\Documents\NetBeansProjects\MegaCityService\target\test-classes;C:\Users\monee\Documents\NetBeansProjects\MegaCityService\target\classes;C:\Users\monee\.m2\repository\jakarta\platform\jakarta.jakartaee-api\8.0.0\jakarta.jakartaee-api-8.0.0.jar;C:\Users\monee\.m2\repository\com\mysql\mysql-connector-j\8.0.33\mysql-connector-j-8.0.33.jar;C:\Users\monee\.m2\repository\com\google\protobuf\protobuf-java\3.21.9\protobuf-java-3.21.9.jar;C:\Users\monee\.m2\repository\jakarta\ws\rs\jakarta.ws.rs-api\3.0.0\jakarta.ws.rs-api-3.0.0.jar;C:\Users\monee\.m2\repository\com\google\code\gson\gson\2.10\gson-2.10.jar;C:\Users\monee\.m2\repository\org\mindrot\jbcrypt\0.4\jbcrypt-0.4.jar;C:\Users\monee\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.6.0\junit-jupiter-api-5.6.0.jar;C:\Users\monee\.m2\repository\org\apiguardian\apiguardian-api\1.1.0\apiguardian-api-1.1.0.jar;C:\Users\monee\.m2\repository\org\opentest4j\opentest4j\1.2.0\opentest4j-1.2.0.jar;C:\Users\monee\.m2\repository\org\junit\platform\junit-platform-commons\1.6.0\junit-platform-commons-1.6.0.jar;C:\Users\monee\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.6.0\junit-jupiter-params-5.6.0.jar;C:\Users\monee\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.6.0\junit-jupiter-engine-5.6.0.jar;C:\Users\monee\.m2\repository\org\junit\platform\junit-platform-engine\1.6.0\junit-platform-engine-1.6.0.jar;"/>
+    <property name="exec.vmArgs" value=""/>
     <property name="sun.cpu.endian" value="little"/>
     <property name="user.home" value="C:\Users\monee"/>
     <property name="user.language" value="en"/>
@@ -33,7 +35,7 @@
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.awt.graphicsenv" value="sun.awt.Win32GraphicsEnvironment"/>
-    <property name="surefire.real.class.path" value="C:\Users\monee\AppData\Local\Temp\surefire1598286352147873692\surefirebooter-20250226111807850_3.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\monee\AppData\Local\Temp\surefire2374140100344048695\surefirebooter-20250226130553791_3.jar"/>
     <property name="sun.boot.class.path" value="C:\Users\monee\Documents\NetBeansJDKs\zulu8.84.0.15-ca-jdk8.0.442-win_x64\zulu8.84.0.15-ca-jdk8.0.442-win_x64\jre\lib\resources.jar;C:\Users\monee\Documents\NetBeansJDKs\zulu8.84.0.15-ca-jdk8.0.442-win_x64\zulu8.84.0.15-ca-jdk8.0.442-win_x64\jre\lib\rt.jar;C:\Users\monee\Documents\NetBeansJDKs\zulu8.84.0.15-ca-jdk8.0.442-win_x64\zulu8.84.0.15-ca-jdk8.0.442-win_x64\jre\lib\sunrsasign.jar;C:\Users\monee\Documents\NetBeansJDKs\zulu8.84.0.15-ca-jdk8.0.442-win_x64\zulu8.84.0.15-ca-jdk8.0.442-win_x64\jre\lib\jsse.jar;C:\Users\monee\Documents\NetBeansJDKs\zulu8.84.0.15-ca-jdk8.0.442-win_x64\zulu8.84.0.15-ca-jdk8.0.442-win_x64\jre\lib\jce.jar;C:\Users\monee\Documents\NetBeansJDKs\zulu8.84.0.15-ca-jdk8.0.442-win_x64\zulu8.84.0.15-ca-jdk8.0.442-win_x64\jre\lib\charsets.jar;C:\Users\monee\Documents\NetBeansJDKs\zulu8.84.0.15-ca-jdk8.0.442-win_x64\zulu8.84.0.15-ca-jdk8.0.442-win_x64\jre\lib\jfr.jar;C:\Users\monee\Documents\NetBeansJDKs\zulu8.84.0.15-ca-jdk8.0.442-win_x64\zulu8.84.0.15-ca-jdk8.0.442-win_x64\jre\lib\cat.jar;C:\Users\monee\Documents\NetBeansJDKs\zulu8.84.0.15-ca-jdk8.0.442-win_x64\zulu8.84.0.15-ca-jdk8.0.442-win_x64\jre\classes"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
@@ -64,35 +66,27 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="52.0"/>
   </properties>
-  <testcase name="testDeleteCustomers" classname="db.DBUtilsTest" time="0.35">
+  <testcase name="testDeleteCustomers" classname="db.DBUtilsTest" time="0.88">
     <system-out><![CDATA[deleteCustomer
 Customer added: delete@example.com (Rows affected: 1)
 Running getCustomer with email: delete@example.com
 No customer found for email: delete@example.com
 ]]></system-out>
   </testcase>
-  <testcase name="testAddCustomers" classname="db.DBUtilsTest" time="0.027">
+  <testcase name="testAddCustomers" classname="db.DBUtilsTest" time="0.028">
     <system-out><![CDATA[addCustomer
 Customer added: test@example.com (Rows affected: 1)
 ]]></system-out>
   </testcase>
-  <testcase name="testGetCustomers" classname="db.DBUtilsTest" time="0.025">
+  <testcase name="testGetCustomers" classname="db.DBUtilsTest" time="0.012">
     <system-out><![CDATA[getCustomers
 ]]></system-out>
     <system-err><![CDATA[Loading class `com.mysql.jdbc.Driver'. This is deprecated. The new driver class is `com.mysql.cj.jdbc.Driver'. The driver is automatically registered via the SPI and manual loading of the driver class is generally unnecessary.
 ]]></system-err>
   </testcase>
-  <testcase name="testUpdateCustomers" classname="db.DBUtilsTest" time="0.045">
+  <testcase name="testUpdateCustomers" classname="db.DBUtilsTest" time="0.032">
     <system-out><![CDATA[updateCustomer
 Customer added: update@example.com (Rows affected: 1)
-]]></system-out>
-  </testcase>
-  <testcase name="testGetCabs" classname="db.DBUtilsTest" time="0.005">
-    <system-out><![CDATA[getCabs
-]]></system-out>
-  </testcase>
-  <testcase name="testAddVehicle" classname="db.DBUtilsTest" time="0.017">
-    <system-out><![CDATA[addVehicle
 ]]></system-out>
   </testcase>
   <testcase name="testGetCustomer" classname="db.DBUtilsTest" time="0.037">

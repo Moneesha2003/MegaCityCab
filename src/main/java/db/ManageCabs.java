@@ -5,15 +5,13 @@ public class ManageCabs {
     private String vehicle;
     private int passengers;
     private String number;
-    private String driver;
 
     public ManageCabs() {}
 
-    public ManageCabs(String vehicle, int passengers, String number, String driver) {
+    public ManageCabs(String vehicle, int passengers, String number) {
         this.vehicle = vehicle;
         this.passengers = passengers;
         this.number = number;
-        this.driver = driver;
     }
 
     // Getters and Setters
@@ -28,7 +26,4 @@ public class ManageCabs {
 
     public String getNumber() { return number; }
     public void setNumber(String number) { this.number = number; }
-
-    public String getDriver() { return driver; }
-    public void setDriver(String driver) { this.driver = driver; }
 }
