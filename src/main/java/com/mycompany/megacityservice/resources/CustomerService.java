@@ -131,7 +131,7 @@ public class CustomerService {
     @Path("login")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response login(String json, @Context HttpServletRequest request) {  // Add @Context to get the HttpServletRequest
+    public Response login(String json, @Context HttpServletRequest request) {
         Gson gson = new Gson();
         Customer loginRequest = gson.fromJson(json, Customer.class);
 
@@ -147,9 +147,9 @@ public class CustomerService {
 
             // Verify hashed password
             if (BCrypt.checkpw(password, customer.getPassword())) {
-                // Successful login: store user email in the session
                 HttpSession session = request.getSession();
-                session.setAttribute("userEmail", customer.getEmail());  // Save the email in the session
+                session.setAttribute("userEmail", customer.getEmail());
+                session.setAttribute("userName", customer.getName());  // Store the name in session
 
                 return Response.status(200).entity(gson.toJson(customer)).build();
             } else {
@@ -159,6 +159,19 @@ public class CustomerService {
             e.printStackTrace();
             return Response.status(500).entity("{\"message\":\"Server error\"}").build();
         }
+    }
+
+    @GET
+    @Path("currentUser")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getCurrentUser(@Context HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("userName") == null) {
+            return Response.status(401).entity("{\"message\":\"User not logged in\"}").build();
+        }
+
+        String userName = (String) session.getAttribute("userName");
+        return Response.status(200).entity("{\"name\":\"" + userName + "\"}").build();
     }
 
 }
