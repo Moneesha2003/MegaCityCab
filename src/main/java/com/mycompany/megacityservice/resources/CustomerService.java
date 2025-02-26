@@ -97,17 +97,14 @@ public class CustomerService {
     public Response updateCustomers(String json) {
         Gson gson = new Gson();
         Customer cr = gson.fromJson(json, Customer.class);
+
         DBUtils utils = new DBUtils();
         boolean res = utils.updateCustomers(cr);
 
         if (res) {
-            return Response
-                    .status(200)
-                    .build();
+            return Response.status(200).build();
         } else {
-            return Response
-                    .status(500)
-                    .build();
+            return Response.status(500).build();
         }
     }
 

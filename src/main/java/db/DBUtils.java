@@ -96,18 +96,18 @@ public class DBUtils {
     }
 
     public boolean updateCustomers(Customer cr) {
-        try {
-            DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+        String query = "UPDATE customers SET name = ?, contact = ?, address = ?, NIC = ? WHERE email = ?";
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS); PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, cr.getName());
+            stmt.setString(2, cr.getContact());
+            stmt.setString(3, cr.getAddress());
+            stmt.setString(4, cr.getNIC());
+            stmt.setString(5, cr.getEmail()); // Email is the identifier
 
-            try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS); Statement stmt = conn.createStatement();) {
-                stmt.executeUpdate("UPDATE customers SET name = '" + cr.getName() + "',contact = '" + cr.getContact() + "',address = '" + cr.getAddress() + "',NIC = '" + cr.getNIC() + "',password = '" + cr.getPassword() + "' WHERE (email = '" + cr.getEmail() + "');");
-                return true;
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
-        } catch (Exception e) {
-
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return false;
     }
