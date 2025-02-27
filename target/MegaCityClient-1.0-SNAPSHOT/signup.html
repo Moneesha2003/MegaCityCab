@@ -4,239 +4,287 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Sign Up - Mega City Cab</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <style>
+            /* General Styles */
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family: 'Poppins', sans-serif;
+            }
+
             body {
-                font-family: Arial, sans-serif;
-                background-color: #002147; /* Navy Blue Theme */
+                background: url('assets/images/Taxi.jpg') center/cover no-repeat;
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 height: 100vh;
-                margin: 0;
-                flex-direction: column;
-                color: white;
+                color: #333;
             }
+
+            /* Container */
             .container {
-                background: white;
-                padding: 25px;
-                border-radius: 12px;
-                box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+                background: rgba(255, 255, 255, 0.9);
+                padding: 30px;
+                border-radius: 10px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
                 width: 350px;
                 text-align: center;
-                transition: 0.3s ease-in-out;
+                animation: fadeIn 1s ease-in-out;
             }
+
+            /* Heading */
             h2 {
-                color: #002147;
-                margin-bottom: 10px;
-                font-size: 22px;
+                margin-bottom: 20px;
+                font-size: 1.8rem;
+                color: #222;
             }
-            input {
-                width: 90%;
-                padding: 12px;
-                margin: 8px 0;
-                border: 2px solid #ccc;
+
+            /* Form Inputs */
+            .input-group {
+                position: relative;
+                margin-bottom: 15px;
+            }
+
+            .input-group input {
+                width: 100%;
+                padding: 12px 40px;
+                border: 1px solid #ccc;
                 border-radius: 5px;
-                font-size: 16px;
+                font-size: 1rem;
                 outline: none;
-                transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+                transition: border 0.3s ease-in-out;
             }
-            input:focus {
-                border-color: #004080;
-                box-shadow: 0px 0px 8px rgba(0, 33, 71, 0.5);
+
+            .input-group input:focus {
+                border-color: #ffd700;
             }
+
+            /* Icons */
+            .input-group i {
+                position: absolute;
+                left: 15px;
+                top: 50%;
+                transform: translateY(-50%);
+                font-size: 1.2rem;
+                color: #888;
+            }
+
+            /* Buttons */
             button {
                 width: 100%;
-                background-color: #002147;
-                color: white;
-                border: none;
                 padding: 12px;
-                margin-top: 10px;
+                background: #ffd700;
+                border: none;
+                font-size: 1rem;
                 border-radius: 5px;
                 cursor: pointer;
-                font-size: 16px;
-                font-weight: bold;
-                transition: background-color 0.3s ease-in-out, transform 0.2s;
+                transition: background 0.3s, transform 0.3s;
             }
+
             button:hover {
-                background-color: #004080;
-                transform: translateY(-2px);
+                background: #e6c300;
+                transform: scale(1.05);
             }
+
+            /* Clear Button */
             .clear-btn {
-                background-color: #666;
-            }
-            .clear-btn:hover {
-                background-color: #444;
-            }
-            .message {
+                background: #999;
                 margin-top: 10px;
-                font-weight: bold;
-                font-size: 14px;
             }
-            .message.success {
-                color: green;
+
+            .clear-btn:hover {
+                background: #777;
             }
-            .message.error {
+
+            /* Messages */
+            .message {
+                font-size: 0.9rem;
+                margin-top: 10px;
                 color: red;
             }
+
             .signin-text {
                 margin-top: 15px;
-                font-size: 14px;
-                color: #555;
-                text-align: center;
             }
 
             .signin-text a {
-                color: #002147;
+                color: #ffd700;
                 text-decoration: none;
                 font-weight: bold;
+                transition: color 0.3s;
             }
 
             .signin-text a:hover {
-                text-decoration: underline;
+                color: #e6c300;
             }
 
+            /* Animations */
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(-20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
         </style>
     </head>
-    <body>
-        <div class="container">
-            <h2>Sign Up</h2>
+    <div class="container">
+        <h2>Sign Up</h2>
+
+        <div class="input-group">
+            <i class="fa-solid fa-user"></i>
             <input type="text" id="name" placeholder="Full Name">
-            <p id="nameError" class="message" style="color: red;"></p>
-
-            <input type="email" id="email" placeholder="Email">
-            <p id="emailError" class="message" style="color: red;"></p>
-
-            <input type="text" id="contact" placeholder="Contact Number">
-            <p id="contactError" class="message" style="color: red;"></p>
-            
-            <input type="text" id="address" placeholder="Address">
-            <p id="addressError" class="message" style="color: red;"></p>
-            
-            <input type="text" id="NIC" placeholder="NIC">
-            <p id="NICError" class="message" style="color: red;"></p>
-
-            <input type="password" id="password" placeholder="Password">
-            <p id="passwordError" class="message" style="color: red;"></p>
-
-            <button onclick="signup()">Sign Up</button>
-            <button class="clear-btn" onclick="clearForm()">Clear</button>
-
-            <p class="message" id="message"></p>
-
-            <p class="signin-text">Already have an account? <a href="signin.html">Sign In</a></p>
         </div>
 
-        <script>
-            function validateForm(name, email, contact, address, NIC, password) {
-                let isValid = true;
+        <div class="input-group">
+            <i class="fa-solid fa-envelope"></i>
+            <input type="email" id="email" placeholder="Email">
+        </div>
 
-                // Name validation (Only letters & spaces, min 3 characters)
-                if (!/^[A-Za-z\s]{3,}$/.test(name)) {
-                    document.getElementById('nameError').innerText = "Enter a valid name (Min 3 letters).";
-                    isValid = false;
-                } else {
-                    document.getElementById('nameError').innerText = "";
-                }
+        <div class="input-group">
+            <i class="fa-solid fa-phone"></i>
+            <input type="text" id="contact" placeholder="Contact Number">
+        </div>
 
-                // Email validation
-                if (!/^\S+@\S+\.\S+$/.test(email)) {
-                    document.getElementById('emailError').innerText = "Enter a valid email.";
-                    isValid = false;
-                } else {
-                    document.getElementById('emailError').innerText = "";
-                }
+        <div class="input-group">
+            <i class="fa-solid fa-location-dot"></i>
+            <input type="text" id="address" placeholder="Address">
+        </div>
 
-                // Contact Number validation (Only numbers, min 10 digits)
-                if (!/^\d{10,}$/.test(contact)) {
-                    document.getElementById('contactError').innerText = "Enter a valid contact number (Min 10 digits).";
-                    isValid = false;
-                } else {
-                    document.getElementById('contactError').innerText = "";
-                }
-                
-                // Address validation (Only letters & spaces, min 3 characters)
-                if (!/^[A-Za-z\s]{3,}$/.test(address)) {
-                    document.getElementById('addressError').innerText = "Enter a valid address (Min 3 letters).";
-                    isValid = false;
-                } else {
-                    document.getElementById('addressError').innerText = "";
-                }
-                
-                // NIC validation (Only numbers, min 12 digits)
-                if (!/^\d{12,}$/.test(NIC)) {
-                    document.getElementById('NICError').innerText = "Enter a valid NIC (Min 12 digits).";
-                    isValid = false;
-                } else {
-                    document.getElementById('NICError').innerText = "";
-                }
+        <div class="input-group">
+            <i class="fa-solid fa-id-card"></i>
+            <input type="text" id="NIC" placeholder="NIC">
+        </div>
 
-                // Password validation (Min 6 chars, 1 uppercase, 1 number, 1 special char)
-                if (!/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/.test(password)) {
-                    document.getElementById('passwordError').innerText = "Min 6 chars, 1 uppercase, 1 number, 1 special char.";
-                    isValid = false;
-                } else {
-                    document.getElementById('passwordError').innerText = "";
-                }
+        <div class="input-group">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="password" placeholder="Password">
+        </div>
 
-                return isValid;
+
+        <button onclick="signup()">Sign Up</button>
+        <button class="clear-btn" onclick="clearForm()">Clear</button>
+
+        <p class="message" id="message"></p>
+
+        <p class="signin-text">Already have an account? <a href="signin.html">Sign In</a></p>
+    </div>
+    <script>
+        function validateForm(name, email, contact, address, NIC, password) {
+            let isValid = true;
+
+            // Name validation (Only letters & spaces, min 3 characters)
+            if (!/^[A-Za-z\s]{3,}$/.test(name)) {
+                document.getElementById('nameError').innerText = "Enter a valid name (Min 3 letters).";
+                isValid = false;
+            } else {
+                document.getElementById('nameError').innerText = "";
             }
 
-            function signup() {
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const contact = document.getElementById('contact').value;
-    const address = document.getElementById('address').value;
-    const NIC = document.getElementById('NIC').value;
-    const password = document.getElementById('password').value;
-    const message = document.getElementById('message');
-
-    if (!validateForm(name, email, contact, address, NIC, password)) {
-        message.style.color = "red";
-        message.innerText = "Please fix the errors above.";
-        return;
-    }
-
-    const customer = { name, email, contact, address, NIC, password };
-
-    fetch('http://localhost:8080/MegaCityService/resources/customers', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(customer)
-    })
-    .then(response => {
-        if (response.status === 201) {
-            message.style.color = "green";
-            message.innerText = "Sign up successful!";
-        } else {
-            message.style.color = "red";
-            message.innerText = "Sign up failed. Try again.";
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        message.style.color = "red";
-        message.innerText = "An error occurred.";
-    });
-}
-
-
-            function clearForm() {
-                document.getElementById('name').value = "";
-                document.getElementById('email').value = "";
-                document.getElementById('contact').value = "";
-                document.getElementById('address').value = "";
-                document.getElementById('NIC').value = "";
-                document.getElementById('password').value = "";
-                document.getElementById('message').innerText = "";
-                document.getElementById('nameError').innerText = "";
+            // Email validation
+            if (!/^\S+@\S+\.\S+$/.test(email)) {
+                document.getElementById('emailError').innerText = "Enter a valid email.";
+                isValid = false;
+            } else {
                 document.getElementById('emailError').innerText = "";
+            }
+
+            // Contact Number validation (Only numbers, min 10 digits)
+            if (!/^\d{10,}$/.test(contact)) {
+                document.getElementById('contactError').innerText = "Enter a valid contact number (Min 10 digits).";
+                isValid = false;
+            } else {
                 document.getElementById('contactError').innerText = "";
+            }
+
+            // Address validation (Only letters & spaces, min 3 characters)
+            if (!/^[A-Za-z\s]{3,}$/.test(address)) {
+                document.getElementById('addressError').innerText = "Enter a valid address (Min 3 letters).";
+                isValid = false;
+            } else {
                 document.getElementById('addressError').innerText = "";
+            }
+
+            // NIC validation (Only numbers, min 12 digits)
+            if (!/^\d{12,}$/.test(NIC)) {
+                document.getElementById('NICError').innerText = "Enter a valid NIC (Min 12 digits).";
+                isValid = false;
+            } else {
                 document.getElementById('NICError').innerText = "";
+            }
+
+            // Password validation (Min 6 chars, 1 uppercase, 1 number, 1 special char)
+            if (!/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/.test(password)) {
+                document.getElementById('passwordError').innerText = "Min 6 chars, 1 uppercase, 1 number, 1 special char.";
+                isValid = false;
+            } else {
                 document.getElementById('passwordError').innerText = "";
             }
-        </script>
-    </body>
+
+            return isValid;
+        }
+
+        function signup() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const contact = document.getElementById('contact').value;
+            const address = document.getElementById('address').value;
+            const NIC = document.getElementById('NIC').value;
+            const password = document.getElementById('password').value;
+            const message = document.getElementById('message');
+
+            if (!validateForm(name, email, contact, address, NIC, password)) {
+                message.style.color = "red";
+                message.innerText = "Please fix the errors above.";
+                return;
+            }
+
+            const customer = {name, email, contact, address, NIC, password};
+
+            fetch('http://localhost:8080/MegaCityService/resources/customers', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(customer)
+            })
+                    .then(response => {
+                        if (response.status === 201) {
+                            message.style.color = "green";
+                            message.innerText = "Sign up successful!";
+                        } else {
+                            message.style.color = "red";
+                            message.innerText = "Sign up failed. Try again.";
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        message.style.color = "red";
+                        message.innerText = "An error occurred.";
+                    });
+        }
+
+
+        function clearForm() {
+            document.getElementById('name').value = "";
+            document.getElementById('email').value = "";
+            document.getElementById('contact').value = "";
+            document.getElementById('address').value = "";
+            document.getElementById('NIC').value = "";
+            document.getElementById('password').value = "";
+            document.getElementById('message').innerText = "";
+            document.getElementById('nameError').innerText = "";
+            document.getElementById('emailError').innerText = "";
+            document.getElementById('contactError').innerText = "";
+            document.getElementById('addressError').innerText = "";
+            document.getElementById('NICError').innerText = "";
+            document.getElementById('passwordError').innerText = "";
+        }
+    </script>
+</body>
 </html>

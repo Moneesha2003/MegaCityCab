@@ -4,95 +4,132 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Login - Mega City Cab</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <style>
-           body {
-                font-family: Arial, sans-serif;
-                background-color: #002147; /* Navy Blue Theme */
+            /* General Styles */
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family: 'Poppins', sans-serif;
+            }
+
+            body {
+                background: url('assets/images/Taxi.jpg') center/cover no-repeat;
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 height: 100vh;
-                margin: 0;
-                flex-direction: column;
-                color: white;
+                color: #333;
             }
+
+            /* Container */
             .container {
-                background: white;
-                padding: 25px;
-                border-radius: 12px;
-                box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+                background: rgba(255, 255, 255, 0.9);
+                padding: 30px;
+                border-radius: 10px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
                 width: 350px;
                 text-align: center;
-                transition: 0.3s ease-in-out;
+                animation: fadeIn 1s ease-in-out;
             }
+
+            /* Heading */
             h2 {
-                color: #002147;
-                margin-bottom: 10px;
-                font-size: 22px;
+                margin-bottom: 20px;
+                font-size: 1.8rem;
+                color: #222;
             }
-            input {
-                width: 90%;
-                padding: 12px;
-                margin: 8px 0;
-                border: 2px solid #ccc;
+
+            /* Form Inputs */
+            .input-group {
+                position: relative;
+                margin-bottom: 15px;
+            }
+
+            .input-group input {
+                width: 100%;
+                padding: 12px 40px;
+                border: 1px solid #ccc;
                 border-radius: 5px;
-                font-size: 16px;
+                font-size: 1rem;
                 outline: none;
-                transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+                transition: border 0.3s ease-in-out;
             }
-            input:focus {
-                border-color: #004080;
-                box-shadow: 0px 0px 8px rgba(0, 33, 71, 0.5);
+
+            .input-group input:focus {
+                border-color: #ffd700;
             }
+
+            /* Icons */
+            .input-group i {
+                position: absolute;
+                left: 15px;
+                top: 50%;
+                transform: translateY(-50%);
+                font-size: 1.2rem;
+                color: #888;
+            }
+
+            /* Buttons */
             button {
                 width: 100%;
-                background-color: #002147;
-                color: white;
-                border: none;
                 padding: 12px;
-                margin-top: 10px;
+                background: #ffd700;
+                border: none;
+                font-size: 1rem;
                 border-radius: 5px;
                 cursor: pointer;
-                font-size: 16px;
-                font-weight: bold;
-                transition: background-color 0.3s ease-in-out, transform 0.2s;
+                transition: background 0.3s, transform 0.3s;
             }
+
             button:hover {
-                background-color: #004080;
-                transform: translateY(-2px);
+                background: #e6c300;
+                transform: scale(1.05);
             }
+
+            /* Clear Button */
             .clear-btn {
-                background-color: #666;
-            }
-            .clear-btn:hover {
-                background-color: #444;
-            }
-            .message {
+                background: #999;
                 margin-top: 10px;
-                font-weight: bold;
-                font-size: 14px;
             }
-            .message.success {
-                color: green;
+
+            .clear-btn:hover {
+                background: #777;
             }
-            .message.error {
+
+            /* Messages */
+            .message {
+                font-size: 0.9rem;
+                margin-top: 10px;
                 color: red;
             }
+
             .signup-text {
                 margin-top: 15px;
-                font-size: 14px;
-                color: #555;
-                text-align: center;
             }
 
             .signup-text a {
-                color: #002147;
+                color: #ffd700;
                 text-decoration: none;
                 font-weight: bold;
+                transition: color 0.3s;
             }
 
             .signup-text a:hover {
-                text-decoration: underline;
+                color: #e6c300;
+            }
+
+            /* Animations */
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(-20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
             }
         </style>
     </head>
@@ -100,8 +137,14 @@
 
         <div class="container">
             <h2>Login</h2>
-            <input type="email" id="email" placeholder="Email" required>
-            <input type="password" id="password" placeholder="Password" required>
+            <div class="input-group">
+                <i class="fa-solid fa-envelope"></i>
+                <input type="email" id="email" placeholder="Email">
+            </div>
+            <div class="input-group">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" id="password" placeholder="Password">
+            </div>
             <button onclick="login()">Login</button>
             <p id="message" class="message"></p>
             <p class="signup-text">Don't have an account? <a href="signup.html">Sign Up</a></p>
@@ -132,7 +175,7 @@
                                 message.style.color = "green";
                                 message.textContent = "Login successful! Redirecting...";
                                 setTimeout(() => {
-                                    window.location.href = "UserDashboard.html"; 
+                                    window.location.href = "UserDashboard.html";
                                 }, 1500);
                             } else {
                                 message.style.color = "red";
