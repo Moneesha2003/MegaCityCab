@@ -1,163 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cab Booking</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #002147;
-            color: white;
-            text-align: center;
-            padding: 20px;
-        }
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cab Booking</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #002147;
+                color: white;
+                text-align: center;
+                padding: 20px;
+            }
 
-        h2 {
-            margin-bottom: 20px;
-        }
+            h2 {
+                margin-bottom: 20px;
+            }
 
-        form {
-            background-color: white;
-            color: #002147;
-            padding: 20px;
-            border-radius: 10px;
-            width: 300px;
-            margin: auto;
-            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
-        }
+            form {
+                background-color: white;
+                color: #002147;
+                padding: 20px;
+                border-radius: 10px;
+                width: 300px;
+                margin: auto;
+                box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
+            }
 
-        label {
-            display: block;
-            margin-top: 10px;
-            font-weight: bold;
-        }
+            label {
+                display: block;
+                margin-top: 10px;
+                font-weight: bold;
+            }
 
-        input, select {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            border: 1px solid #002147;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
+            input, select {
+                width: 100%;
+                padding: 8px;
+                margin-top: 5px;
+                border: 1px solid #002147;
+                border-radius: 5px;
+                box-sizing: border-box;
+            }
 
-        button {
-            background-color: #002147;
-            color: white;
-            border: none;
-            padding: 10px;
-            margin-top: 15px;
-            width: 100%;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
+            button {
+                background-color: #002147;
+                color: white;
+                border: none;
+                padding: 10px;
+                margin-top: 15px;
+                width: 100%;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 16px;
+            }
 
-        button:hover {
-            background-color: #000066;
-        }
+            button:hover {
+                background-color: #000066;
+            }
 
-        #priceSection {
-            margin-top: 20px;
-            display: none;
-        }
+            #priceSection {
+                margin-top: 20px;
+                display: none;
+            }
 
-        #priceSection p {
-            font-size: 18px;
-            font-weight: bold;
-        }
+            #priceSection p {
+                font-size: 18px;
+                font-weight: bold;
+            }
 
-        #confirmBooking {
-            background-color: white;
-            color: navy;
-            border: 2px solid #002147;
-            font-weight: bold;
-            width: 500px;
-        }
+            #confirmBooking {
+                background-color: white;
+                color: navy;
+                border: 2px solid #002147;
+                font-weight: bold;
+                width: 500px;
+            }
 
-        #confirmBooking:hover {
-            background-color: greenyellow;
-            color: white;
-        }
+            #confirmBooking:hover {
+                background-color: greenyellow;
+                color: white;
+            }
 
-    </style>
-</head>
-<body>
-    <h2>Cab Booking</h2>
-    <h3 id="welcomeMessage">Hi, <span id="name"></span></h3>
-    <form id="bookingForm">
-        <label>Pickup Location:</label>
-        <input type="text" id="pickupLocation" required><br>
+        </style>
+    </head>
+    <body>
+        <h2>Cab Booking</h2>
+        <h3 id="welcomeMessage">Hi, <span id="name"></span></h3>
+        <form id="bookingForm">
+            <label>Pickup Location:</label>
+            <input type="text" id="pickupLocation" required><br>
 
-        <label>Drop-off Location:</label>
-        <input type="text" id="dropoffLocation" required><br>
+            <label>Drop-off Location:</label>
+            <input type="text" id="dropoffLocation" required><br>
 
-        <label>Passengers:</label>
-        <input type="number" id="passengers" min="1" required><br>
+            <label>Passengers:</label>
+            <input type="number" id="passengers" min="1" required><br>
 
-        <label>Vehicle Type:</label>
-        <select id="vehicleType">
-            <option value="car">Car</option>
-            <option value="tuk">Tuk</option>
-            <option value="van">Van</option>
-        </select><br>
+            <label>Vehicle Type:</label>
+            <select id="vehicleType">
+                <option value="">Select a Vehicle</option> 
+            </select><br>
 
-        <button type="submit">Get Price</button>
-    </form>
+            <button type="submit">Get Price</button>
+        </form>
 
-    <div id="priceSection">
-        <p>Price: <span id="price"></span></p>
-        <button id="confirmBooking">Confirm Booking</button>
-    </div>
+        <div id="priceSection">
+            <p>Price: <span id="price"></span></p>
+            <button id="confirmBooking">Confirm Booking</button>
+        </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            fetch("http://localhost:8080/MegaCityService/resources/customers/currentUser")
-                .then(response => response.json())
-                .then(data => {
-                    if (data.name) {
-                        document.getElementById("name").textContent = data.name;
-                    } else {
-                        document.getElementById("welcomeMessage").textContent = "Hi, Guest";
-                    }
-                })
-                .catch(error => console.error("Error fetching user:", error));
-        });
-        document.addEventListener("DOMContentLoaded", function () {
-            document.getElementById("bookingForm").addEventListener("submit", function (event) {
-                event.preventDefault();
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                fetch("http://localhost:8080/MegaCityService/resources/cabs")
+                        .then(response => response.json())
+                        .then(data => {
+                            let vehicleDropdown = document.getElementById("vehicleType");
 
-                const bookingData = {
-                    pickupLocation: document.getElementById("pickupLocation").value,
-                    dropoffLocation: document.getElementById("dropoffLocation").value,
-                    passengers: parseInt(document.getElementById("passengers").value),
-                    vehicleType: document.getElementById("vehicleType").value,
-                    distanceKm: (Math.random() * 30 + 5).toFixed(2) // Simulated random distance (5-35km)
-                };
-
-                fetch("http://localhost:8080/MegaCityService/resources/bookings", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(bookingData)
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error("Network response was not ok");
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    document.getElementById("price").textContent = "Rs. " + data.price;
-                    document.getElementById("priceSection").style.display = "block";
-                })
-                .catch(error => console.error("Error:", error));
+                            data.forEach(cab => {
+                                let option = document.createElement("option");
+                                option.value = cab.vehicle; // Use the vehicle name as the value
+                                option.textContent = `${cab.vehicle} (Seats: ${cab.passengers})`; // Display vehicle and passenger capacity
+                                vehicleDropdown.appendChild(option);
+                            });
+                        })
+                        .catch(error => console.error("Error fetching vehicles:", error));
             });
-
-            document.getElementById("confirmBooking").addEventListener("click", function () {
-                alert("Booking Confirmed!");
+            document.addEventListener("DOMContentLoaded", function () {
+                fetch("http://localhost:8080/MegaCityService/resources/customers/currentUser")
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.name) {
+                                document.getElementById("name").textContent = data.name;
+                            } else {
+                                document.getElementById("welcomeMessage").textContent = "Hi, Guest";
+                            }
+                        })
+                        .catch(error => console.error("Error fetching user:", error));
             });
-        });
-    </script>
-</body>
+            document.addEventListener("DOMContentLoaded", function () {
+                document.getElementById("bookingForm").addEventListener("submit", function (event) {
+                    event.preventDefault();
+
+                    const bookingData = {
+                        pickupLocation: document.getElementById("pickupLocation").value,
+                        dropoffLocation: document.getElementById("dropoffLocation").value,
+                        passengers: parseInt(document.getElementById("passengers").value),
+                        vehicleType: document.getElementById("vehicleType").value,
+                        distanceKm: (Math.random() * 30 + 5).toFixed(2) // Simulated random distance (5-35km)
+                    };
+
+                    fetch("http://localhost:8080/MegaCityService/resources/bookings", {
+                        method: "POST",
+                        headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify(bookingData)
+                    })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error("Network response was not ok");
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                document.getElementById("price").textContent = "Rs. " + data.price;
+                                document.getElementById("priceSection").style.display = "block";
+                            })
+                            .catch(error => console.error("Error:", error));
+                });
+
+                document.getElementById("confirmBooking").addEventListener("click", function () {
+                    alert("Booking Confirmed!");
+                });
+            });
+        </script>
+    </body>
 </html>
