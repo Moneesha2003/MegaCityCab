@@ -170,12 +170,12 @@ public class DBUtils {
     }
 
     public boolean addVehicle(ManageCabs cab) {
-        String query = "INSERT INTO cabs (vehicle, passengers, number) VALUES (?, ?, ?)";
+        String query = "INSERT INTO cabs (vehicle, driver, passengers) VALUES (?, ?, ?)";
 
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS); PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, cab.getVehicle());
-            stmt.setInt(2, cab.getPassengers());
-            stmt.setString(3, cab.getNumber());
+            stmt.setString(2, cab.getDriver());
+            stmt.setInt(3, cab.getPassengers());
 
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
@@ -193,8 +193,8 @@ public class DBUtils {
             while (rs.next()) {
                 ManageCabs cab = new ManageCabs(
                         rs.getString("vehicle"),
-                        rs.getInt("passengers"),
-                        rs.getString("number")
+                        rs.getString("driver"),
+                        rs.getInt("passengers")
                 );
                 cabs.add(cab);
             }

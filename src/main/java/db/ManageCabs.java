@@ -3,15 +3,15 @@ package db;
 public class ManageCabs {
     private int id;
     private String vehicle;
+    private String driver;
     private int passengers;
-    private String number;
 
     public ManageCabs() {}
 
-    public ManageCabs(String vehicle, int passengers, String number) {
+    public ManageCabs(String vehicle, String driver, int passengers) {
         this.vehicle = vehicle;
+        this.driver = driver;
         this.passengers = passengers;
-        this.number = number;
     }
 
     // Getters and Setters
@@ -20,10 +20,10 @@ public class ManageCabs {
 
     public String getVehicle() { return vehicle; }
     public void setVehicle(String vehicle) { this.vehicle = vehicle; }
+    
+    public String getDriver() { return driver; }
+    public void setDriver(String driver) { this.driver = driver; }
 
     public int getPassengers() { return passengers; }
     public void setPassengers(int passengers) { this.passengers = passengers; }
-
-    public String getNumber() { return number; }
-    public void setNumber(String number) { this.number = number; }
 }
