@@ -82,13 +82,13 @@
 
             .hero h1 {
                 font-size: 3rem;
-                animation: fadeIn 2s ease-in-out;
+                animation: fadeIn 1s ease-in-out;
             }
 
             .hero p {
                 font-size: 1.2rem;
                 margin: 15px 0;
-                animation: fadeIn 2s ease-in-out 0.5s;
+                animation: fadeIn 2s ease-in-out 0.1s;
             }
 
             .hero button {
@@ -200,14 +200,6 @@
             </div>
 
         </div>
-        <script>
-            // Check if user is logged in
-            const loggedInUser = localStorage.getItem("loggedInUser"); // Example storage method
-            if (loggedInUser) {
-                document.getElementById("accountsLink").style.display = "inline-block";
-            }
-        </script>
-
         <!-- Features Section -->
         <section class="features">
             <h2>Our Features</h2>
@@ -232,8 +224,5 @@
         <footer>
             <p>&copy; 2025 Mega City Cab. All Rights Reserved. | <a href="help.html">Help</a></p>
         </footer>
-
-
     </body>
-
 </html>

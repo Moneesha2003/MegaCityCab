@@ -99,15 +99,15 @@
     <body>
         <div class="container">
             <h2>Manage Cabs</h2>
-            
+
             <input type="text" id="vehicle" placeholder="Vehicle Name">
             <p id="vehicleError" class="message" style="color: red;"></p>
 
+            <input type="text" id="driver" placeholder="Driver">
+            <p id="driverError" class="message" style="color: red;"></p>
+
             <input type="number" id="passengers" placeholder="Passenger Capacity">
             <p id="passengersError" class="message" style="color: red;"></p>
-
-            <input type="text" id="number" placeholder="Vehicle Number">
-            <p id="numberError" class="message" style="color: red;"></p>
 
             <button onclick="addCab()">Add Cab</button>
             <button class="clear-btn" onclick="clearForm()">Clear</button>
@@ -118,12 +118,12 @@
         </div>
 
         <script>
-            function validateForm(vehicle, passengers, number) {
+            function validateForm(vehicle, driver, passengers) {
                 let isValid = true;
 
-                // Vehicle validation (Min 3 characters)
-                if (!/^[A-Za-z\s]{3,}$/.test(vehicle)) {
-                    document.getElementById('vehicleError').innerText = "Enter a valid vehicle name (Min 3 letters).";
+                // Vehicle validation (Allow alphanumeric and spaces, minimum 3 characters)
+                if (!/^[A-Za-z0-9\s]{3,}$/.test(vehicle)) {
+                    document.getElementById('vehicleError').innerText = "Enter a valid vehicle name (Min 3 characters, alphanumeric allowed).";
                     isValid = false;
                 } else {
                     document.getElementById('vehicleError').innerText = "";
@@ -137,30 +137,22 @@
                     document.getElementById('passengersError').innerText = "";
                 }
 
-                // Vehicle Number validation (Min 4 characters)
-                if (!/^[A-Za-z0-9]{4,}$/.test(number)) {
-                    document.getElementById('numberError').innerText = "Enter a valid vehicle number (Min 4 characters).";
-                    isValid = false;
-                } else {
-                    document.getElementById('numberError').innerText = "";
-                }
-
                 return isValid;
             }
 
             function addCab() {
                 const vehicle = document.getElementById('vehicle').value;
+                const driver = document.getElementById('driver').value;
                 const passengers = document.getElementById('passengers').value;
-                const number = document.getElementById('number').value;
                 const message = document.getElementById('message');
 
-                if (!validateForm(vehicle, passengers, number)) {
+                if (!validateForm(vehicle, driver, passengers)) {
                     message.style.color = "red";
                     message.innerText = "Please fix the errors above.";
                     return;
                 }
 
-                const cab = { vehicle, passengers, number};
+                const cab = {vehicle, driver, passengers};
 
                 fetch('http://localhost:8080/MegaCityService/resources/cabs', {
                     method: 'POST',
@@ -169,30 +161,30 @@
                     },
                     body: JSON.stringify(cab)
                 })
-                .then(response => {
-                    if (response.status === 201) {
-                        message.style.color = "green";
-                        message.innerText = "Cab added successfully!";
-                    } else {
-                        message.style.color = "red";
-                        message.innerText = "Failed to add cab. Try again.";
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    message.style.color = "red";
-                    message.innerText = "An error occurred.";
-                });
+                        .then(response => {
+                            if (response.status === 201) {
+                                message.style.color = "green";
+                                message.innerText = "Cab added successfully!";
+                            } else {
+                                message.style.color = "red";
+                                message.innerText = "Failed to add cab. Try again.";
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            message.style.color = "red";
+                            message.innerText = "An error occurred.";
+                        });
             }
 
             function clearForm() {
                 document.getElementById('vehicle').value = "";
+                document.getElementById('driver').value = "";
                 document.getElementById('passengers').value = "";
-                document.getElementById('number').value = "";
                 document.getElementById('message').innerText = "";
                 document.getElementById('vehicleError').innerText = "";
+                document.getElementById('driverError').innerText = "";
                 document.getElementById('passengersError').innerText = "";
-                document.getElementById('numberError').innerText = "";
             }
         </script>
     </body>
