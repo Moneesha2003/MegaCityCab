@@ -256,6 +256,7 @@
             }
             /* Cab Cards */
             .cab-cards-container {
+                padding-left: 20px;
                 display: flex;
                 flex-wrap: wrap;
                 gap: 20px;
@@ -264,10 +265,10 @@
 
             .cab-card {
                 background-color: #fff;
-                padding: 20px;
+                padding: 15px;
                 border-radius: 8px;
                 box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-                width: calc(33% - 20px);
+                width: calc(33% - 15px);
                 text-align: center;
                 transition: transform 0.3s ease;
             }
@@ -295,6 +296,141 @@
                 font-size: 1rem;
                 color: #555;
             }
+            /* Modal Styles */
+            .modal {
+                display: none; /* Hidden by default */
+                position: fixed; /* Stay in place */
+                z-index: 1000; /* Sit on top */
+                left: 0;
+                top: 0;
+                width: 100%; /* Full width */
+                height: 100%; /* Full height */
+                overflow: auto; /* Enable scroll if needed */
+                background-color: rgba(0, 0, 0, 0.5); /* Black with opacity */
+            }
+
+            .modal-content {
+                background-color: #fff;
+                margin: 10% auto; /* 10% from the top and centered */
+                padding: 20px;
+                border-radius: 10px;
+                width: 80%; /* 80% width */
+                max-width: 600px; /* Maximum width */
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                animation: fadeIn 0.3s ease-in-out;
+            }
+
+            .close {
+                color: #aaa;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+                cursor: pointer;
+            }
+
+            .close:hover,
+            .close:focus {
+                color: #000;
+                text-decoration: none;
+            }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(-20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .logo {
+                color: #ffd700;
+                font-size: 1.8rem;
+                font-weight: bold;
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+            #bill-section {
+                max-width: 600px;
+                margin: 20px auto;
+                padding: 20px;
+                background-color: #fff;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            #bill-section h2 {
+                text-align: center;
+                color: #333;
+                font-size: 1.5rem;
+                margin-bottom: 20px;
+            }
+
+            #bill-section p {
+                margin: 10px 0;
+                font-size: 1rem;
+                color: #555;
+            }
+
+            #bill-section strong {
+                color: #333;
+                font-weight: 600;
+            }
+
+            .button-group {
+                display: flex;
+                justify-content: center;
+                gap: 10px;
+                margin-top: 20px;
+            }
+
+            .button-group button {
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                background-color: #ffd700;
+                color: #333;
+                font-size: 1rem;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+            .button-group button:hover {
+                background-color: #e6b800;
+            }
+
+            .button-group button:active {
+                background-color: #cc9900;
+            }
+
+            /* Hide everything except the bill section when printing */
+            @media print {
+                body * {
+                    visibility: hidden; /* Hide all elements */
+                }
+
+                #bill-section, #bill-section * {
+                    visibility: visible; /* Show only the bill section and its children */
+                }
+
+                #bill-section {
+                    position: absolute; /* Position the bill section at the top of the page */
+                    left: 0;
+                    top: 0;
+                    width: 100%; /* Ensure it takes the full width */
+                    box-shadow: none; /* Remove shadow for printing */
+                    border: none; /* Remove border for printing */
+                    padding: 0; /* Remove padding for printing */
+                }
+
+                .button-group {
+                    display: none; /* Hide buttons when printing */
+                }
+            }
+
             /* Responsive Design */
             @media (max-width: 600px) {
                 .container {
@@ -302,6 +438,7 @@
                     padding: 20px;
                 }
             }
+
             /* Animations */
             @keyframes fadeIn {
                 from {
@@ -442,9 +579,36 @@
                         <div id="cab-cards" class="cab-cards-container">
                             <!-- Cab Cards will appear here -->
                         </div>
+                        <!-- Add this modal structure inside the <body> -->
+                        <div id="bill-modal" class="modal">
+                            <div class="modal-content">
+                                <span class="close" onclick="closeBillModal()">&times;</span>
+                                <div id="bill-section">
+                                    <div class="logo">
+                                        Mega City Cab
+                                    </div>
+                                    <h2>Booking Bill</h2>
+                                    <p><strong>Booking ID:</strong> <span id="bill-id"></span></p>
+                                    <p><strong>Customer Name:</strong> <span id="bill-customer-name"></span></p>
+                                    <p><strong>Customer Email:</strong> <span id="bill-customer-email"></span></p>
+                                    <p><strong>Vehicle:</strong> <span id="bill-vehicle"></span></p>
+                                    <p><strong>Driver:</strong> <span id="bill-driver"></span></p>
+                                    <p><strong>Passengers:</strong> <span id="bill-passengers"></span></p>
+                                    <p><strong>Pickup Location:</strong> <span id="bill-pickup"></span></p>
+                                    <p><strong>Drop-off Location:</strong> <span id="bill-dropoff"></span></p>
+                                    <p><strong>Time:</strong> <span id="bill-time"></span></p>
+                                    <p><strong>Price:</strong> <span id="bill-price"></span></p>
+                                    <div class="button-group">
+                                        <button onclick="printBill()">Print Bill</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     `;
                         loadCabs(); // Fetch and display cabs
+                        
                 }
+                
                 
                 function loadCabs() {
                         fetch("http://localhost:8080/MegaCityService/resources/cabs")
@@ -548,61 +712,62 @@
                 }
 
                 function confirmBooking() {
-    // Fetch the current user's details
-    fetch("http://localhost:8080/MegaCityService/resources/customers/currentUser")
-        .then(response => response.json())
-        .then(user => {
-            if (user.message) {
-                alert("User not logged in. Please log in to book a ride.");
-                return;
-            }
+                    // Fetch the current user's details
+                    fetch("http://localhost:8080/MegaCityService/resources/customers/currentUser")
+                        .then(response => response.json())
+                        .then(user => {
+                            if (user.message) {
+                                alert("User not logged in. Please log in to book a ride.");
+                                return;
+                            }
 
-            // Get values from the form
-            const booking = {
-                vehicle: document.getElementById("vehicle").value,
-                driver: document.getElementById("driver").value,
-                passengers: parseInt(document.getElementById("passengers").value),
-                pickupLocation: document.getElementById("pickup").value,
-                dropoffLocation: document.getElementById("dropoff").value,
-                time: document.getElementById("time").value,
-                price: parseFloat(document.getElementById("price").value),
-                customerName: user.name, // Add the customer's name
-                customerEmail: user.email // Add the customer's email
-            };
+                            // Get values from the form
+                            const booking = {
+                                vehicle: document.getElementById("vehicle").value,
+                                driver: document.getElementById("driver").value,
+                                passengers: parseInt(document.getElementById("passengers").value),
+                                pickupLocation: document.getElementById("pickup").value,
+                                dropoffLocation: document.getElementById("dropoff").value,
+                                time: document.getElementById("time").value,
+                                price: parseFloat(document.getElementById("price").value),
+                                customerName: user.name, // Add the customer's name
+                                customerEmail: user.email // Add the customer's email
+                            };
 
-            // Validate required fields
-            if (!booking.vehicle || !booking.driver || !booking.pickupLocation || !booking.dropoffLocation || !booking.time || isNaN(booking.passengers) || isNaN(booking.price)) {
-                alert("Please fill in all the fields correctly.");
-                return;
-            }
+                            // Validate required fields
+                            if (!booking.vehicle || !booking.driver || !booking.pickupLocation || !booking.dropoffLocation || !booking.time || isNaN(booking.passengers) || isNaN(booking.price)) {
+                                alert("Please fill in all the fields correctly.");
+                                return;
+                            }
 
-            // Send booking data to backend API
-            fetch("http://localhost:8080/MegaCityService/resources/bookings", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(booking)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.message) {
-                    alert("Error: " + data.message);
-                } else {
-                    alert("Booking Confirmed Successfully!");
-                    clearForm(); // Clear the form after successful booking
+                            // Send booking data to backend API
+                            fetch("http://localhost:8080/MegaCityService/resources/bookings", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json"
+                                },
+                                body: JSON.stringify(booking)
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.message) {
+                                    alert("Error: " + data.message);
+                                } else {
+                                    alert("Booking Confirmed Successfully!");
+                                    generateBill(data.id); // Generate bill for the new booking
+                                    clearForm();
+                                }
+                            })
+                            .catch(error => {
+                                console.error("Error:", error);
+                                alert("Failed to confirm booking. Please try again.");
+                            });
+                        })
+                        .catch(error => {
+                            console.error("Error fetching current user:", error);
+                            alert("Failed to fetch user details. Please try again.");
+                        });
                 }
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                alert("Failed to confirm booking. Please try again.");
-            });
-        })
-        .catch(error => {
-            console.error("Error fetching current user:", error);
-            alert("Failed to fetch user details. Please try again.");
-        });
-}
                 // Function to clear the form
                 function clearForm() {
                     document.getElementById("vehicle").value = "";
@@ -613,6 +778,44 @@
                     document.getElementById("time").value = "";
                     document.getElementById("price").value = "";
                     document.getElementById("confirm-btn").disabled = true; // Reset button on clear
+                }
+                
+                function generateBill(bookingId) {
+    fetch(`http://localhost:8080/MegaCityService/resources/bookings/${bookingId}`)
+        .then(response => response.json())
+        .then(booking => {
+            if (booking.message) {
+                alert("Booking not found.");
+                return;
+            }
+
+            // Populate the bill section with booking details
+            document.getElementById("bill-id").textContent = booking.id;
+            document.getElementById("bill-customer-name").textContent = booking.customerName;
+            document.getElementById("bill-customer-email").textContent = booking.customerEmail;
+            document.getElementById("bill-vehicle").textContent = booking.vehicle;
+            document.getElementById("bill-driver").textContent = booking.driver;
+            document.getElementById("bill-passengers").textContent = booking.passengers;
+            document.getElementById("bill-pickup").textContent = booking.pickupLocation;
+            document.getElementById("bill-dropoff").textContent = booking.dropoffLocation;
+            document.getElementById("bill-time").textContent = booking.time;
+            document.getElementById("bill-price").textContent = booking.price.toFixed(2);
+
+            // Show the bill modal
+            document.getElementById("bill-modal").style.display = "block";
+        })
+        .catch(error => {
+            console.error("Error fetching booking details:", error);
+            alert("Failed to fetch booking details. Please try again.");
+        });
+}
+
+                function closeBillModal() {
+    document.getElementById("bill-modal").style.display = "none";
+}
+
+                function printBill() {
+                    window.print(); // Print the bill
                 }
         </script>
     </body>
