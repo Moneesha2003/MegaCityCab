@@ -511,6 +511,31 @@
                         });
                 }
                 
+                function checkAvailability() {
+                    const vehicle = document.getElementById("vehicle").value;
+                    const time = document.getElementById("time").value;
+
+                    if (!vehicle || !time) {
+                        alert("Please select a vehicle and enter a time.");
+                        return;
+                    }
+
+                    // Fetch availability from the backend
+                    fetch(`http://localhost:8080/MegaCityService/resources/bookings/checkAvailability/${vehicle}/${time}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.available) {
+                                alert("The vehicle is available for booking!");
+                            } else {
+                                alert("This vehicle is already booked for the selected time. Please choose a different time or vehicle.");
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error checking availability:", error);
+                            alert("Failed to check availability. Please try again.");
+                        });
+                }
+
                 function confirmBooking() {
                     // Get values from the form
                     const booking = {
