@@ -149,9 +149,9 @@ public class DBUtils {
         return bookings;
     }
 
-    public boolean addBooking(Booking booking) {
+    public int addBooking(Booking booking) {
         String query = "INSERT INTO bookings (vehicle, driver, passengers, pickup_location, dropoff_location, time, price, customer_name, customer_email) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS); PreparedStatement stmt = conn.prepareStatement(query)) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS); PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, booking.getVehicle());
             stmt.setString(2, booking.getDriver());
             stmt.setInt(3, booking.getPassengers());
@@ -159,15 +159,22 @@ public class DBUtils {
             stmt.setString(5, booking.getDropoffLocation());
             stmt.setString(6, booking.getTime());
             stmt.setDouble(7, booking.getPrice());
-            stmt.setString(8, booking.getCustomerName()); // Add customer name
-            stmt.setString(9, booking.getCustomerEmail()); // Add customer email
+            stmt.setString(8, booking.getCustomerName());
+            stmt.setString(9, booking.getCustomerEmail());
             int rowsAffected = stmt.executeUpdate();
-            System.out.println("Booking added: " + booking.getPickupLocation() + " to " + booking.getDropoffLocation() + " (Rows affected: " + rowsAffected + ")"); // Debug
-            return rowsAffected > 0;
+
+            if (rowsAffected > 0) {
+                // Retrieve the generated booking ID
+                try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        return generatedKeys.getInt(1); // Return the generated ID
+                    }
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return -1; // Return -1 if the booking was not added
     }
 
     public boolean addVehicle(ManageCabs cab) {
@@ -242,5 +249,31 @@ public class DBUtils {
             e.printStackTrace();
         }
         return false; // Return false if there's an error
+    }
+
+    public Booking getBookingById(int id) {
+        Booking booking = null;
+        String query = "SELECT * FROM bookings WHERE id = ?";
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS); PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    booking = new Booking();
+                    booking.setId(rs.getInt("id"));
+                    booking.setVehicle(rs.getString("vehicle"));
+                    booking.setDriver(rs.getString("driver"));
+                    booking.setPassengers(rs.getInt("passengers"));
+                    booking.setPickupLocation(rs.getString("pickup_location"));
+                    booking.setDropoffLocation(rs.getString("dropoff_location"));
+                    booking.setTime(rs.getString("time"));
+                    booking.setPrice(rs.getDouble("price"));
+                    booking.setCustomerName(rs.getString("customer_name")); // Added field
+                    booking.setCustomerEmail(rs.getString("customer_email")); // Added field
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return booking;
     }
 }

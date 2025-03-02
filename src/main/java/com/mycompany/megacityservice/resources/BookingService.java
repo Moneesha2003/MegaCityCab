@@ -37,9 +37,10 @@ public class BookingService {
         Booking booking = gson.fromJson(json, Booking.class);
 
         DBUtils db = new DBUtils();
-        boolean success = db.addBooking(booking);
+        int bookingId = db.addBooking(booking); // Change the return type to int
 
-        if (success) {
+        if (bookingId > 0) {
+            booking.setId(bookingId); // Set the ID in the booking object
             return Response.status(201).entity(gson.toJson(booking)).build();
         } else {
             return Response.status(500).entity("{\"message\": \"Error adding booking\"}").build();
@@ -69,5 +70,20 @@ public class BookingService {
 
         String jsonResponse = "{\"available\": " + isAvailable + "}";
         return Response.status(200).entity(jsonResponse).build();
+    }
+
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getBookingById(@PathParam("id") int id) {
+        DBUtils utils = new DBUtils();
+        Booking booking = utils.getBookingById(id);
+
+        if (booking != null) {
+            Gson gson = new Gson();
+            return Response.status(200).entity(gson.toJson(booking)).build();
+        } else {
+            return Response.status(404).entity("{\"message\": \"Booking not found\"}").build();
+        }
     }
 }
