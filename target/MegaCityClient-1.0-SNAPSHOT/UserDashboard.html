@@ -548,46 +548,61 @@
                 }
 
                 function confirmBooking() {
-                    // Get values from the form
-                    const booking = {
-                        vehicle: document.getElementById("vehicle").value,
-                        driver: document.getElementById("driver").value,
-                        passengers: parseInt(document.getElementById("passengers").value),
-                        pickupLocation: document.getElementById("pickup").value,
-                        dropoffLocation: document.getElementById("dropoff").value,
-                        time: document.getElementById("time").value,
-                        price: parseFloat(document.getElementById("price").value)
-                    };
+    // Fetch the current user's details
+    fetch("http://localhost:8080/MegaCityService/resources/customers/currentUser")
+        .then(response => response.json())
+        .then(user => {
+            if (user.message) {
+                alert("User not logged in. Please log in to book a ride.");
+                return;
+            }
 
-                    // Validate required fields
-                    if (!booking.vehicle || !booking.driver || !booking.pickupLocation || !booking.dropoffLocation || !booking.time || isNaN(booking.passengers) || isNaN(booking.price)) {
-                        alert("Please fill in all the fields correctly.");
-                        return;
-                    }
+            // Get values from the form
+            const booking = {
+                vehicle: document.getElementById("vehicle").value,
+                driver: document.getElementById("driver").value,
+                passengers: parseInt(document.getElementById("passengers").value),
+                pickupLocation: document.getElementById("pickup").value,
+                dropoffLocation: document.getElementById("dropoff").value,
+                time: document.getElementById("time").value,
+                price: parseFloat(document.getElementById("price").value),
+                customerName: user.name, // Add the customer's name
+                customerEmail: user.email // Add the customer's email
+            };
 
-                    // Send booking data to backend API
-                    fetch("http://localhost:8080/MegaCityService/resources/bookings", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify(booking)
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.message) {
-                            alert("Error: " + data.message);
-                        } else {
-                            alert("Booking Confirmed Successfully!");
-                            clearForm(); // Clear the form after successful booking
-                        }
-                    })
-                    .catch(error => {
-                        console.error("Error:", error);
-                        alert("Failed to confirm booking. Please try again.");
-                    });
+            // Validate required fields
+            if (!booking.vehicle || !booking.driver || !booking.pickupLocation || !booking.dropoffLocation || !booking.time || isNaN(booking.passengers) || isNaN(booking.price)) {
+                alert("Please fill in all the fields correctly.");
+                return;
+            }
+
+            // Send booking data to backend API
+            fetch("http://localhost:8080/MegaCityService/resources/bookings", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(booking)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert("Error: " + data.message);
+                } else {
+                    alert("Booking Confirmed Successfully!");
+                    clearForm(); // Clear the form after successful booking
                 }
-
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Failed to confirm booking. Please try again.");
+            });
+        })
+        .catch(error => {
+            console.error("Error fetching current user:", error);
+            alert("Failed to fetch user details. Please try again.");
+        });
+}
                 // Function to clear the form
                 function clearForm() {
                     document.getElementById("vehicle").value = "";
