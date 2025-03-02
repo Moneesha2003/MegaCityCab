@@ -136,6 +136,8 @@ public class DBUtils {
                     booking.setDropoffLocation(rs.getString("dropoff_location"));
                     booking.setTime(rs.getString("time"));
                     booking.setPrice(rs.getDouble("price"));
+                    booking.setCustomerName(rs.getString("customer_name"));
+                    booking.setCustomerEmail(rs.getString("customer_email"));
                     bookings.add(booking);
                 }
             } catch (SQLException e) {
