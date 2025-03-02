@@ -108,13 +108,15 @@
 
             <input type="number" id="passengers" placeholder="Passenger Capacity">
             <p id="passengersError" class="message" style="color: red;"></p>
+            
+            <input type="number" id="price_per_km" placeholder="Price per km">
+            <p id="price_per_kmError" class="message" style="color: red;"></p>
 
             <button onclick="addCab()">Add Cab</button>
             <button class="clear-btn" onclick="clearForm()">Clear</button>
 
             <p class="message" id="message"></p>
 
-            <p class="signin-text">Manage existing cabs? <a href="viewCabs.html">View Cabs</a></p>
         </div>
 
         <script>
@@ -144,6 +146,7 @@
                 const vehicle = document.getElementById('vehicle').value;
                 const driver = document.getElementById('driver').value;
                 const passengers = document.getElementById('passengers').value;
+                const price_per_km = document.getElementById('price_per_km').value;
                 const message = document.getElementById('message');
 
                 if (!validateForm(vehicle, driver, passengers)) {
@@ -152,7 +155,7 @@
                     return;
                 }
 
-                const cab = {vehicle, driver, passengers};
+                const cab = {vehicle, driver, passengers, price_per_km};
 
                 fetch('http://localhost:8080/MegaCityService/resources/cabs', {
                     method: 'POST',
@@ -181,10 +184,12 @@
                 document.getElementById('vehicle').value = "";
                 document.getElementById('driver').value = "";
                 document.getElementById('passengers').value = "";
+                document.getElementById('price_per_km').value = "";
                 document.getElementById('message').innerText = "";
                 document.getElementById('vehicleError').innerText = "";
                 document.getElementById('driverError').innerText = "";
                 document.getElementById('passengersError').innerText = "";
+                document.getElementById('price_per_kmError').innerText = "";
             }
         </script>
     </body>

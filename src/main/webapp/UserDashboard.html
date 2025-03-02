@@ -177,14 +177,22 @@
             .container {
                 border: 2px solid #000;
                 padding: 20px;
-                width: 350px;
+                width: 500px;
                 margin: auto;
                 border-radius: 8px;
                 background-color: #f9f9f9;
                 box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             }
 
-            /* Label Styling */
+            .form-grid {
+                display: flex;
+                gap: 20px;
+            }
+
+            .left-column, .right-column {
+                flex: 1;
+            }
+
             .container label {
                 font-weight: bold;
                 display: block;
@@ -193,10 +201,9 @@
                 color: #333;
             }
 
-            /* Input Fields Styling */
             .container input {
                 width: 100%;
-                padding: 12px;
+                padding: 10px;
                 margin-top: 5px;
                 border: 2px solid #ddd;
                 border-radius: 6px;
@@ -211,17 +218,22 @@
                 box-shadow: 0px 0px 10px rgba(0, 33, 71, 0.3);
             }
 
-            /* Button Styling */
+            .button-group {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 20px;
+            }
+
             button {
-                width: 45%;
+                flex: 1;
                 padding: 12px;
                 border: none;
                 border-radius: 6px;
                 background-color: #ffd700;
                 font-size: 1rem;
                 cursor: pointer;
-                margin-top: 10px;
-                color: white;
+                margin: 5px;
+                color: black;
                 transition: background-color 0.3s ease;
             }
 
@@ -229,7 +241,6 @@
                 background-color: #f39c12;
             }
 
-            /* Button Clear Styling */
             button.clear-btn {
                 background-color: #c9302c;
             }
@@ -259,7 +270,7 @@
                 transform: translateY(-10px);
             }
             .cab-card.selected {
-                background-color: #f0f8ff;  /* Light blue background for selected cab */
+                background-color: #ffd700;  /* Light blue background for selected cab */
                 border-color: #007bff;       /* Blue border for selected cab */
             }
 
@@ -316,119 +327,129 @@
         </div>
 
         <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                loadProfile();
-            });
+                    document.addEventListener("DOMContentLoaded", function () {
+                        loadProfile();
+                    });
 
-            function loadProfile() {
-                const customer = JSON.parse(localStorage.getItem("customer"));
-                if (!customer) {
-                    window.location.href = "signin.html"; // Redirect if not logged in
-                } else {
-                    document.getElementById("welcome-msg").innerText = `Hi, ${customer.name}!`;
-                }
-            }
+                    function loadProfile() {
+                        const customer = JSON.parse(localStorage.getItem("customer"));
+                        if (!customer) {
+                            window.location.href = "signin.html"; // Redirect if not logged in
+                        } else {
+                            document.getElementById("welcome-msg").innerText = `Hi, ${customer.name}!`;
+                        }
+                    }
 
-            function showProfile() {
-                const customer = JSON.parse(localStorage.getItem("customer"));
-                if (!customer) {
-                    alert("No profile data found.");
-                    return;
-                }
+                    function showProfile() {
+                        const customer = JSON.parse(localStorage.getItem("customer"));
+                        if (!customer) {
+                            alert("No profile data found.");
+                            return;
+                        }
 
                 document.getElementById("main-content").innerHTML = `
-                    <div class="profile-container">
-                        <h2>Customer Profile</h2>
-                        <form id="profileForm">
-                            <label for="name">Name:</label>
-                            <input type="text" id="name" value="${customer.name}" disabled>
+                <div class="profile-container">
+                <h2>Customer Profile</h2>
+                <form id="profileForm">
+            <label for="name">Name:</label>
+                <input type="text" id="name" value="${customer.name}" disabled>
+        
+                <label for="email">Email:</label>
+            <input type="email" id="email" value="${customer.email}" disabled>
+        
+            <label for="contact">Contact:</label>
+            <input type="text" id="contact" value="${customer.contact}" disabled>
+        
+                <label for="address">Address:</label>
+            <input type="text" id="address" value="${customer.address}" disabled>
+                
+                <label for="nic">NIC:</label>
+                <input type="text" id="nic" value="${customer.NIC}" disabled>
                     
-                            <label for="email">Email:</label>
-                            <input type="email" id="email" value="${customer.email}" disabled>
-                    
-                            <label for="contact">Contact:</label>
-                            <input type="text" id="contact" value="${customer.contact}" disabled>
-                    
-                            <label for="address">Address:</label>
-                            <input type="text" id="address" value="${customer.address}" disabled>
-                    
-                            <label for="nic">NIC:</label>
-                            <input type="text" id="nic" value="${customer.NIC}" disabled>
-                    
-                            <button type="button" class="edit-btn" onclick="enableEdit()">Edit</button>
-                            <button type="button" class="update-btn" onclick="updateProfile()">Update</button>
-                            <button type="button" class="logout-btn" onclick="logout()">Logout</button>
-                        </form>
-                    </div>
+                <button type="button" class="edit-btn" onclick="enableEdit()">Edit</button>
+                <button type="button" class="update-btn" onclick="updateProfile()">Update</button>
+                <button type="button" class="logout-btn" onclick="logout()">Logout</button>
+                            </form>
+                </div>
                 `;
-            }
+                    }
 
-            function enableEdit() {
-                document.querySelectorAll("input").forEach(input => input.disabled = false);
+                            function enableEdit() {
+                            document.querySelectorAll("input").forEach(input => input.disabled = false);
                 document.querySelector(".edit-btn").style.display = "none";
-                document.querySelector(".update-btn").style.display = "inline-block";
-            }
-
-            function updateProfile() {
-                let updatedCustomer = {
-                    name: document.getElementById("name").value,
-                    email: document.getElementById("email").value,
-                    contact: document.getElementById("contact").value,
-                    address: document.getElementById("address").value,
-                    NIC: document.getElementById("nic").value
-                };
-                localStorage.setItem("customer", JSON.stringify(updatedCustomer));
+                            document.querySelector(".update-btn").style.display = "inline-block";
+                    }
+                            function updateProfile() {
+                                    let updatedCustomer = {
+                            name: document.getElementById("name").value,
+                                    email: document.getElementById("email").value,
+                                    contact: document.getElementById("contact").value,
+                                    address: document.getElementById("address").value,
+                            NIC: document.getElementById("nic").value
+                        };
+                            localStorage.setItem("customer", JSON.stringify(updatedCustomer));
                 alert("Profile updated successfully!");
-                loadProfile();
-            }
+            loadProfile();
+                    }
 
-            function logout() {
-                localStorage.removeItem("customer");
+                            function logout() {
+                            localStorage.removeItem("customer");
                 window.location.href = "signin.html";
-            }
-            function showBooking() {
-                document.getElementById("main-content").innerHTML =
-                        `
-            <div class="container">
-                <label>Model:</label>
-                <input type="text" id="vehicle" disabled>
+                }
+                            function showBooking() {
+                    document.getElementById("main-content").innerHTML = `
+                            <div class="container">
+                                <div class="form-grid">
+                                    <div class="left-column">
+                                        <label>Model:</label>
+                                        <input type="text" id="vehicle" disabled>
 
-                <label>Driver:</label>
-                <input type="text" id="driver" disabled>
+                                        <label>Driver:</label>
+                                        <input type="text" id="driver" disabled>
 
-                <label>Passengers:</label>
-                <input type="number" id="passengers" disabled>
+                                        <label>Passengers:</label>
+                                        <input type="number" id="passengers" disabled>
+                                    </div>
 
-                <label>Time:</label>
-                <input type="time" id="time">
+                                    <div class="right-column">
+                                        <label>Pickup Location:</label>
+                                        <input type="text" id="pickup">
 
-                <label>Pickup Location:</label>
-                <input type="text" id="pickup">
+                                        <label>Drop-off Location:</label>
+                                        <input type="text" id="dropoff">
+        
+                                        <label>Time:</label>
+                                        <input type="time" id="time">
 
-                <label>Drop-off Location:</label>
-                <input type="text" id="dropoff">
+                                        <label>Price:</label>
+                                        <input type="text" id="price" disabled> 
+                                    </div>
+                                </div>
 
-                <button onclick="checkAvailability()">Check Availability</button>
-                <button onclick="confirmBooking()">Confirm Booking</button>
-                <button onclick="clearForm()">Clear</button>
-            </div>
-            <div id="cab-cards" class="cab-cards-container">
-                <!-- Cab Cards will appear here -->
-            </div>
-            `;
-                loadCabs();  // Fetch and display cabs
-            }
-
-            function loadCabs() {
-                fetch("http://localhost:8080/MegaCityService/resources/cabs")
-                        .then(response => response.json())
-                        .then(cabs => {
+                                <div class="button-group">
+                                    <button onclick="checkAvailability()">Check Availability</button>
+                                    <button onclick="seePrice()">See Price</button>
+                                    <button onclick="confirmBooking()">Confirm Booking</button>
+                                    <button class="clear-btn" onclick="clearForm()">Clear</button>
+                                </div>
+                            </div>
+                            <div id="cab-cards" class="cab-cards-container">
+                                <!-- Cab Cards will appear here -->
+                            </div>
+                        `;
+                            loadCabs(); // Fetch and display cabs
+                }
+                
+                function loadCabs() {
+                            fetch("http://localhost:8080/MegaCityService/resources/cabs")
+                            .then(response => response.json())
+                           .then(cabs => {
                             const cabContainer = document.getElementById("cab-cards");
-                            cabContainer.innerHTML = ''; // Clear previous content
-                            cabs.forEach(cab => {
-                                const cabCard = document.createElement("div");
-                                cabCard.classList.add("cab-card");
-                                cabCard.innerHTML = `
+                                    cabContainer.innerHTML = ''; // Clear previous content
+                                    cabs.forEach(cab => {
+                                    const cabCard = document.createElement("div");
+                                            cabCard.classList.add("cab-card");
+                                       cabCard.innerHTML = `
                                     <i class="fa-solid fa-car"></i>
                                     <h3>${cab.vehicle}</h3>
                                     <p><strong>Driver:</strong> ${cab.driver}</p>
@@ -457,24 +478,90 @@
                 document.getElementById("driver").value = cab.driver;
                 document.getElementById("passengers").value = cab.passengers;
             }
+            
+                function seePrice() {
+                    const vehicle = document.getElementById("vehicle").value;
+                    const distance = Math.floor(Math.random() * 15) + 1;  // Random distance between 1 and 15 km
+                    getPricePerKm(vehicle).then(pricePerKm => {
+                        if (pricePerKm > 0) {
+                            const totalPrice = pricePerKm * distance;
+                            document.getElementById("price").value = totalPrice.toFixed(2);  // Display price with two decimal points
+                        } else {
+                            alert("Price per km not found for the selected vehicle.");
+                        }
+                    }).catch(error => {
+                        console.error('Error fetching price:', error);
+                        alert("Failed to retrieve price information.");
+                    });
+                }
 
+                function getPricePerKm(vehicle) {
+                    // Fetch the price per km for the selected vehicle type from the backend
+                    return fetch(`http://localhost:8080/MegaCityService/resources/bookings/pricing/${vehicle}`)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Price not found');
+                            }
+                            return response.json();
+                        })
+                        .then(data => data.price_per_km)
+                        .catch(error => {
+                            console.error('Error fetching price:', error);
+                            return 0; // Return 0 if there's an error
+                        });
+                }
+                
+                function confirmBooking() {
+                    // Get values from the form
+                    const booking = {
+                        vehicle: document.getElementById("vehicle").value,
+                        driver: document.getElementById("driver").value,
+                        passengers: parseInt(document.getElementById("passengers").value),
+                        pickupLocation: document.getElementById("pickup").value,
+                        dropoffLocation: document.getElementById("dropoff").value,
+                        time: document.getElementById("time").value,
+                        price: parseFloat(document.getElementById("price").value)
+                    };
 
-            function checkAvailability() {
-                alert("Checking availability...");
-            }
+                    // Validate required fields
+                    if (!booking.vehicle || !booking.driver || !booking.pickupLocation || !booking.dropoffLocation || !booking.time || isNaN(booking.passengers) || isNaN(booking.price)) {
+                        alert("Please fill in all the fields correctly.");
+                        return;
+                    }
 
-            function clearForm() {
-                document.getElementById("model").value = "";
-                document.getElementById("driver").value = "";
-                document.getElementById("passengers").value = "";
-                document.getElementById("time").value = "";
-                document.getElementById("pickup").value = "";
-                document.getElementById("dropoff").value = "";
-            }
+                    // Send booking data to backend API
+                    fetch("http://localhost:8080/MegaCityService/resources/bookings", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(booking)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.message) {
+                            alert("Error: " + data.message);
+                        } else {
+                            alert("Booking Confirmed Successfully!");
+                            clearForm(); // Clear the form after successful booking
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                        alert("Failed to confirm booking. Please try again.");
+                    });
+                }
 
-            function confirmBooking() {
-                alert("Booking confirmed!");
-            }
+                // Function to clear the form
+                function clearForm() {
+                    document.getElementById("vehicle").value = "";
+                    document.getElementById("driver").value = "";
+                    document.getElementById("passengers").value = "";
+                    document.getElementById("pickup").value = "";
+                    document.getElementById("dropoff").value = "";
+                    document.getElementById("time").value = "";
+                    document.getElementById("price").value = "";
+                }
         </script>
     </body>
 </html>
