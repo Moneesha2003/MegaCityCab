@@ -45,7 +45,7 @@ public class BookingService {
             return Response.status(500).entity("{\"message\": \"Error adding booking\"}").build();
         }
     }
-    
+
     @GET
     @Path("/pricing/{vehicleType}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -58,5 +58,16 @@ public class BookingService {
         } else {
             return Response.status(404).entity("{\"message\": \"Price not found\"}").build();
         }
+    }
+
+    @GET
+    @Path("/checkAvailability/{vehicle}/{time}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response checkAvailability(@PathParam("vehicle") String vehicle, @PathParam("time") String time) {
+        DBUtils db = new DBUtils();
+        boolean isAvailable = db.isVehicleAvailable(vehicle, time);
+
+        String jsonResponse = "{\"available\": " + isAvailable + "}";
+        return Response.status(200).entity(jsonResponse).build();
     }
 }

@@ -126,9 +126,7 @@ public class DBUtils {
         try {
             DriverManager.registerDriver(new com.mysql.jdbc.Driver());
 
-            try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-                 Statement stmt = conn.createStatement();
-                 ResultSet rs = stmt.executeQuery("SELECT * FROM bookings")) {
+            try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery("SELECT * FROM bookings")) {
                 while (rs.next()) {
                     Booking booking = new Booking();
                     booking.setId(rs.getInt("id"));
@@ -154,8 +152,7 @@ public class DBUtils {
 
     public boolean addBooking(Booking booking) {
         String query = "INSERT INTO bookings (vehicle, driver, passengers, pickup_location, dropoff_location, time, price) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS); PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, booking.getVehicle());
             stmt.setString(2, booking.getDriver());
             stmt.setInt(3, booking.getPassengers());
@@ -171,7 +168,7 @@ public class DBUtils {
         }
         return false;
     }
-    
+
     public boolean addVehicle(ManageCabs cab) {
         String query = "INSERT INTO cabs (vehicle, driver, passengers, price_per_km) VALUES (?, ?, ?, ?)";
 
@@ -226,4 +223,23 @@ public class DBUtils {
         return -1;
     }
 
+    public boolean isVehicleAvailable(String vehicle, String time) {
+        String query = "SELECT COUNT(*) AS count FROM bookings WHERE vehicle = ? AND time = ?";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS); PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, vehicle);
+            stmt.setString(2, time);
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                int count = rs.getInt("count");
+                return count == 0;  // If count is 0, the vehicle is available
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false; // Return false if there's an error
+    }
 }
