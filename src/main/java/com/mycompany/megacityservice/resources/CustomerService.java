@@ -164,11 +164,15 @@ public class CustomerService {
     public Response getCurrentUser(@Context HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("userName") == null) {
+            System.out.println("User not logged in or session expired");
             return Response.status(401).entity("{\"message\":\"User not logged in\"}").build();
         }
 
         String userName = (String) session.getAttribute("userName");
-        return Response.status(200).entity("{\"name\":\"" + userName + "\"}").build();
+        String userEmail = (String) session.getAttribute("userEmail");
+        System.out.println("Current user: " + userName + ", Email: " + userEmail);
+
+        return Response.status(200).entity("{\"name\":\"" + userName + "\", \"email\":\"" + userEmail + "\"}").build();
     }
 
 }

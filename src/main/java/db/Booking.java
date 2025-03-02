@@ -9,6 +9,8 @@ public class Booking {
     private String dropoffLocation;
     private String time;
     private double price;
+    private String customerName; 
+    private String customerEmail;
 
     public Booking() {}
 
@@ -46,4 +48,10 @@ public class Booking {
     
     public double getPrice() { return price; }
     public void setPrice(double price) { this.price = price; }
+    
+    public String getCustomerName() { return customerName; }
+    public void setCustomerName(String customerName) { this.customerName = customerName; }
+
+    public String getCustomerEmail() { return customerEmail; }
+    public void setCustomerEmail(String customerEmail) { this.customerEmail = customerEmail; }
 }

@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author monee
  */
 public class DBUtilsTest {
-    
+
     public DBUtilsTest() {
     }
 
@@ -39,33 +39,32 @@ public class DBUtilsTest {
     }
 
     @Test
-public void testGetCustomer() throws Exception {
-    Customer expResult = new Customer("Carlos Sainz", "test@gmail.com", "0775869656", "Kahathuduwa", "200385112828", "test123");
-    DBUtils instance = new DBUtils();
+    public void testGetCustomer() throws Exception {
+        Customer expResult = new Customer("Carlos Sainz", "test@gmail.com", "0775869656", "Kahathuduwa", "200385112828", "test123");
+        DBUtils instance = new DBUtils();
 
-    // Step 1: Add test customer
-    boolean added = instance.addCustomers(expResult);
-    assertTrue(added, "Failed to add test customer");
+        // Step 1: Add test customer
+        boolean added = instance.addCustomers(expResult);
+        assertTrue(added, "Failed to add test customer");
 
-    // Step 2: Retrieve customer
-    Customer result = instance.getCustomer(expResult.getEmail());
-    assertNotNull(result, "Customer not found");
-    assertEquals(expResult.getName(), result.getName(), "Name mismatch");
-    assertEquals(expResult.getEmail(), result.getEmail(), "Email mismatch");
-    assertEquals(expResult.getContact(), result.getContact(), "Contact mismatch");
-    assertEquals(expResult.getAddress(),result.getAddress(),"Address mismatch");
-    assertEquals(expResult.getNIC(),result.getNIC(),"NIC mismatch");
-    assertEquals(expResult.getPassword(), result.getPassword(), "Password mismatch");
+        // Step 2: Retrieve customer
+        Customer result = instance.getCustomer(expResult.getEmail());
+        assertNotNull(result, "Customer not found");
+        assertEquals(expResult.getName(), result.getName(), "Name mismatch");
+        assertEquals(expResult.getEmail(), result.getEmail(), "Email mismatch");
+        assertEquals(expResult.getContact(), result.getContact(), "Contact mismatch");
+        assertEquals(expResult.getAddress(), result.getAddress(), "Address mismatch");
+        assertEquals(expResult.getNIC(), result.getNIC(), "NIC mismatch");
+        assertEquals(expResult.getPassword(), result.getPassword(), "Password mismatch");
 
-    // Step 3: Cleanup - Delete customer
-    boolean deleted = instance.deleteCustomers(expResult.getEmail());
-    assertTrue(deleted, "Failed to delete test customer");
+        // Step 3: Cleanup - Delete customer
+        boolean deleted = instance.deleteCustomers(expResult.getEmail());
+        assertTrue(deleted, "Failed to delete test customer");
 
-    // Step 4: Ensure customer is deleted
-    result = instance.getCustomer(expResult.getEmail());
-    assertNull(result, "Customer should be deleted");
-}
-
+        // Step 4: Ensure customer is deleted
+        result = instance.getCustomer(expResult.getEmail());
+        assertNull(result, "Customer should be deleted");
+    }
 
     @Test
     public void testGetCustomers() {
@@ -126,22 +125,4 @@ public void testGetCustomer() throws Exception {
         Customer check = instance.getCustomer(cr.getEmail());
         assertNull(check);
     }
-//    @Test
-//    public void testAddVehicle() {
-//        System.out.println("addVehicle");
-//        ManageCabs cabs = new ManageCabs("Test Vehicle", 4, "WP 1220");
-//        DBUtils instance = new DBUtils();
-//
-//        boolean result = instance.addVehicle(cabs);
-//        assertTrue(result);
-//    }
-//    @Test
-//    public void testGetCabs() {
-//        System.out.println("getCabs");
-//        DBUtils instance = new DBUtils();
-//        List<ManageCabs> result = instance.getCabs();
-//
-//        assertNotNull(result);
-//        assertTrue(result.size() >= 0);
-//    }
 }

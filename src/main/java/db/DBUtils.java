@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -151,7 +150,7 @@ public class DBUtils {
     }
 
     public boolean addBooking(Booking booking) {
-        String query = "INSERT INTO bookings (vehicle, driver, passengers, pickup_location, dropoff_location, time, price) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO bookings (vehicle, driver, passengers, pickup_location, dropoff_location, time, price, customer_name, customer_email) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS); PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, booking.getVehicle());
             stmt.setString(2, booking.getDriver());
@@ -160,6 +159,8 @@ public class DBUtils {
             stmt.setString(5, booking.getDropoffLocation());
             stmt.setString(6, booking.getTime());
             stmt.setDouble(7, booking.getPrice());
+            stmt.setString(8, booking.getCustomerName()); // Add customer name
+            stmt.setString(9, booking.getCustomerEmail()); // Add customer email
             int rowsAffected = stmt.executeUpdate();
             System.out.println("Booking added: " + booking.getPickupLocation() + " to " + booking.getDropoffLocation() + " (Rows affected: " + rowsAffected + ")"); // Debug
             return rowsAffected > 0;
