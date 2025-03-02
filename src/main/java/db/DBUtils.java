@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package db;
 
 import java.sql.Connection;
@@ -10,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -124,58 +121,65 @@ public class DBUtils {
         return false;
     }
 
-    public boolean addBooking(Booking booking) {
-        String query = "INSERT INTO bookings (pickup_location, dropoff_location, passengers, vehicle_type, distance_km, price, status) VALUES (?, ?, ?, ?, ?, ?, 'Confirmed')";
-
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS); PreparedStatement stmt = conn.prepareStatement(query)) {
-
-            stmt.setString(1, booking.getPickupLocation());
-            stmt.setString(2, booking.getDropoffLocation());
-            stmt.setInt(3, booking.getPassengers());
-            stmt.setString(4, booking.getVehicleType());
-            stmt.setDouble(5, booking.getDistanceKm());
-            stmt.setDouble(6, booking.getPrice());
-
-            int rowsAffected = stmt.executeUpdate();
-            return rowsAffected > 0;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
     public List<Booking> getBookings() {
         List<Booking> bookings = new ArrayList<>();
-        String query = "SELECT * FROM bookings";
+        try {
+            DriverManager.registerDriver(new com.mysql.jdbc.Driver());
 
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
-            while (rs.next()) {
-                Booking booking = new Booking(
-                        rs.getString("pickup_location"),
-                        rs.getString("dropoff_location"),
-                        rs.getInt("passengers"),
-                        rs.getString("vehicle_type"),
-                        rs.getDouble("distance_km"), // Fixed column name
-                        rs.getDouble("price"),
-                        rs.getString("status") // Added status if needed
-                );
-                bookings.add(booking);
+            try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+                 Statement stmt = conn.createStatement();
+                 ResultSet rs = stmt.executeQuery("SELECT * FROM bookings")) {
+                while (rs.next()) {
+                    Booking booking = new Booking();
+                    booking.setId(rs.getInt("id"));
+                    booking.setVehicle(rs.getString("vehicle"));
+                    booking.setDriver(rs.getString("driver"));
+                    booking.setPassengers(rs.getInt("passengers"));
+                    booking.setPickupLocation(rs.getString("pickup_location"));
+                    booking.setDropoffLocation(rs.getString("dropoff_location"));
+                    booking.setTime(rs.getString("time"));
+                    booking.setPrice(rs.getDouble("price"));
+                    bookings.add(booking);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return bookings;
     }
 
+    public boolean addBooking(Booking booking) {
+        String query = "INSERT INTO bookings (vehicle, driver, passengers, pickup_location, dropoff_location, time, price) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, booking.getVehicle());
+            stmt.setString(2, booking.getDriver());
+            stmt.setInt(3, booking.getPassengers());
+            stmt.setString(4, booking.getPickupLocation());
+            stmt.setString(5, booking.getDropoffLocation());
+            stmt.setString(6, booking.getTime());
+            stmt.setDouble(7, booking.getPrice());
+            int rowsAffected = stmt.executeUpdate();
+            System.out.println("Booking added: " + booking.getPickupLocation() + " to " + booking.getDropoffLocation() + " (Rows affected: " + rowsAffected + ")"); // Debug
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
     public boolean addVehicle(ManageCabs cab) {
-        String query = "INSERT INTO cabs (vehicle, driver, passengers) VALUES (?, ?, ?)";
+        String query = "INSERT INTO cabs (vehicle, driver, passengers, price_per_km) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS); PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, cab.getVehicle());
             stmt.setString(2, cab.getDriver());
             stmt.setInt(3, cab.getPassengers());
+            stmt.setDouble(4, cab.getPrice_per_km());
 
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
@@ -194,7 +198,8 @@ public class DBUtils {
                 ManageCabs cab = new ManageCabs(
                         rs.getString("vehicle"),
                         rs.getString("driver"),
-                        rs.getInt("passengers")
+                        rs.getInt("passengers"),
+                        rs.getDouble("price_per_km")
                 );
                 cabs.add(cab);
             }
@@ -204,4 +209,21 @@ public class DBUtils {
 
         return cabs;
     }
+
+    public double getPricePerKm(String vehicleType) {
+        String query = "SELECT price_per_km FROM cabs WHERE vehicle = ?";
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS); PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, vehicleType);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getDouble("price_per_km");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
 }
