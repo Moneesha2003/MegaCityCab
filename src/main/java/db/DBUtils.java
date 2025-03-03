@@ -92,21 +92,33 @@ public class DBUtils {
     }
 
     public boolean updateCustomers(Customer cr) {
-        String query = "UPDATE customers SET name = ?, contact = ?, address = ?, NIC = ? WHERE email = ?";
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS); PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setString(1, cr.getName());
-            stmt.setString(2, cr.getContact());
-            stmt.setString(3, cr.getAddress());
-            stmt.setString(4, cr.getNIC());
-            stmt.setString(5, cr.getEmail()); // Email is the identifier
+    String query = "UPDATE customers SET name = ?, contact = ?, address = ?, NIC = ? WHERE email = ?";
+    
+    try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+         PreparedStatement stmt = conn.prepareStatement(query)) {
 
-            int rowsAffected = stmt.executeUpdate();
-            return rowsAffected > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
+        // Set parameters for the prepared statement
+        stmt.setString(1, cr.getName());
+        stmt.setString(2, cr.getContact());
+        stmt.setString(3, cr.getAddress());
+        stmt.setString(4, cr.getNIC());
+        stmt.setString(5, cr.getEmail());
+
+        // Execute the update
+        int rowsAffected = stmt.executeUpdate();
+
+        // Return true if at least one row was updated
+        return rowsAffected > 0;
+
+    } catch (SQLException e) {
+        // Log the exception for debugging
+        e.printStackTrace();
+        System.err.println("Error updating customer: " + e.getMessage());
     }
+
+    // Return false if an error occurred
+    return false;
+}
 
     public boolean deleteCustomers(String email) {
         String query = "DELETE FROM customers WHERE email = ?";

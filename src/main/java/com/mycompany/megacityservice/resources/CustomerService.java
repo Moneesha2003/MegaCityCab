@@ -94,17 +94,21 @@ public class CustomerService {
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response updateCustomers(String json) {
         Gson gson = new Gson();
         Customer cr = gson.fromJson(json, Customer.class);
+
+        // Debugging: Print the received customer data
+        System.out.println("Received customer data: " + cr);
 
         DBUtils utils = new DBUtils();
         boolean res = utils.updateCustomers(cr);
 
         if (res) {
-            return Response.status(200).build();
+            return Response.status(Response.Status.OK).entity("Customer updated successfully").build();
         } else {
-            return Response.status(500).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to update customer").build();
         }
     }
 
