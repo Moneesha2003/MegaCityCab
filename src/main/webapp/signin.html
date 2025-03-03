@@ -88,16 +88,6 @@
                 transform: scale(1.05);
             }
 
-            /* Clear Button */
-            .clear-btn {
-                background: #999;
-                margin-top: 10px;
-            }
-
-            .clear-btn:hover {
-                background: #777;
-            }
-
             /* Messages */
             .message {
                 font-size: 0.9rem;
@@ -134,7 +124,6 @@
         </style>
     </head>
     <body>
-
         <div class="container">
             <h2>Login</h2>
             <div class="input-group">
@@ -161,33 +150,43 @@
                     return;
                 }
 
+                // Check for admin credentials
+                if (email === "admin" && password === "admin123") {
+                    message.style.color = "green";
+                    message.textContent = "Admin login successful! Redirecting...";
+                    setTimeout(() => {
+                        window.location.href = "AdminDashboard.html";
+                    }, 1500);
+                    return; // Stop further execution
+                }
+
+                // Regular user login
                 fetch("http://localhost:8080/MegaCityService/resources/customers/login", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
                     },
-                    body: JSON.stringify({email, password})
+                    body: JSON.stringify({ email, password })
                 })
-                        .then(response => response.json().then(data => ({status: response.status, data})))
-                        .then(result => {
-                            if (result.status === 200) {
-                                localStorage.setItem("customer", JSON.stringify(result.data));
-                                message.style.color = "green";
-                                message.textContent = "Login successful! Redirecting...";
-                                setTimeout(() => {
-                                    window.location.href = "UserDashboard.html";
-                                }, 1500);
-                            } else {
-                                message.style.color = "red";
-                                message.textContent = result.data.message || "Invalid email or password.";
-                            }
-                        })
-                        .catch(error => {
-                            console.error("Error:", error);
-                            message.textContent = "An error occurred. Please try again.";
-                        });
+                .then(response => response.json().then(data => ({ status: response.status, data })))
+                .then(result => {
+                    if (result.status === 200) {
+                        localStorage.setItem("customer", JSON.stringify(result.data));
+                        message.style.color = "green";
+                        message.textContent = "Login successful! Redirecting...";
+                        setTimeout(() => {
+                            window.location.href = "UserDashboard.html";
+                        }, 1500);
+                    } else {
+                        message.style.color = "red";
+                        message.textContent = result.data.message || "Invalid email or password.";
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    message.textContent = "An error occurred. Please try again.";
+                });
             }
         </script>
-
     </body>
 </html>
