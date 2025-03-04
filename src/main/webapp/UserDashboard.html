@@ -406,6 +406,85 @@
                 background-color: #cc9900;
             }
 
+            /* Ride History Container */
+            .container {
+                width: 100%;
+                max-width: 1200px;
+                margin: 20px auto;
+                padding: 20px;
+                background: rgba(255, 255, 255, 0.98);
+                border-radius: 12px;
+                box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+                animation: fadeIn 0.5s ease-in-out;
+            }
+
+            .container h2 {
+                color: #002147; /* Dark blue for headings */
+                font-size: 1.8rem;
+                font-weight: bold;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+
+            /* Ride History Table */
+            #ride-history-table {
+                width: 100%;
+                border-collapse: collapse;
+                background-color: #ffffff;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                border-radius: 8px;
+                overflow: hidden;
+            }
+
+            #ride-history-table th,
+            #ride-history-table td {
+                padding: 12px 15px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+            }
+
+            #ride-history-table th {
+                background-color: yellow; 
+                color: darkblue;
+                font-weight: bold;
+                text-transform: uppercase;
+                font-size: 0.9rem;
+            }
+
+            #ride-history-table tr {
+                transition: background-color 0.3s ease;
+            }
+
+            #ride-history-table tr:hover {
+                background-color: #f1f1f1; /* Light gray for hover effect */
+            }
+
+            #ride-history-table td {
+                color: #333; /* Dark gray for table data */
+                font-size: 0.95rem;
+            }
+
+            /* No Ride History Message */
+            #ride-history-list tr td[colspan="8"] {
+                text-align: center;
+                padding: 20px;
+                color: #555; /* Gray for no data message */
+                font-style: italic;
+            }
+
+            /* Responsive Table */
+            @media (max-width: 768px) {
+                #ride-history-table {
+                    display: block;
+                    overflow-x: auto;
+                }
+
+                #ride-history-table th,
+                #ride-history-table td {
+                    white-space: nowrap;
+                }
+            }
+
             /* Hide everything except the bill section when printing */
             @media print {
                 body * {
@@ -460,113 +539,108 @@
             <ul class="nav-links">
                 <li onclick="showProfile()"><i class="fa-solid fa-user"></i> View Profile</li>
                 <li onclick="showBooking()"><i class="fa-solid fa-taxi"></i> Book a Ride</li>
-                <li onclick="location.href = 'ride-history.html'"><i class="fa-solid fa-clock-rotate-left"></i> Ride History</li>
+                <li onclick="showRideHistory()"><i class="fa-solid fa-clock-rotate-left"></i> Ride History</li>
             </ul>
         </div>
 
         <!-- Main Content -->
-        <div class="main-content" id="main-content">
-            <h1 id="welcome-msg">Welcome!</h1>
+                            <div class="main-content" id="main-content">
+                            <h1 id="welcome-msg">Welcome!</h1>
         </div>
-
+                            
         <script>
-                document.addEventListener("DOMContentLoaded", function () {
+                            document.addEventListener("DOMContentLoaded", function () {
                     loadProfile();
-                });
-
-                function loadProfile() {
-                    const customer = JSON.parse(localStorage.getItem("customer"));
-                    if (!customer) {
-                        window.location.href = "signin.html"; // Redirect if not logged in
-                    } else {
-                        document.getElementById("welcome-msg").innerText = `Hi, ${customer.name}!`;
+                            });
+                            function loadProfile() {
+                            const customer = JSON.parse(localStorage.getItem("customer"));
+                            if (!customer) {
+                            window.location.href = "signin.html"; // Redirect if not logged in
+                            } else {
+                            document.getElementById("welcome-msg").innerText = `Hi, ${customer.name}!`;
                     }
-                }
+                            }
 
-                function showProfile() {
-                    const customer = JSON.parse(localStorage.getItem("customer"));
-                    if (!customer) {
-                        alert("No profile data found.");
-                        return;
+                            function showProfile() {
+                            const customer = JSON.parse(localStorage.getItem("customer"));
+                            if (!customer) {
+                    alert("No profile data found.");
+                    return;
                     }
 
-                    document.getElementById("main-content").innerHTML = `
-                        <div class="profile-container">
-                            <h2>Customer Profile</h2>
+                document.getElementById("main-content").innerHTML = `
+                <div class="profile-container">
+                <h2>Customer Profile</h2>
                             <form id="profileForm">
-                                <label for="name">Name:</label>
-                                <input type="text" id="name" value="${customer.name}" disabled>
+                <label for="name">Name:</label>
+            <input type="text" id="name" value="${customer.name}" disabled>
 
-                                <label for="email">Email:</label>
-                                <input type="email" id="email" value="${customer.email}" disabled>
+            <label for="email">Email:</label>
+                <input type="email" id="email" value="${customer.email}" disabled>
 
-                                <label for="contact">Contact:</label>
-                                <input type="text" id="contact" value="${customer.contact}" disabled>
+                <label for="contact">Contact:</label>
+                <input type="text" id="contact" value="${customer.contact}" disabled>
 
-                                <label for="address">Address:</label>
-                                <input type="text" id="address" value="${customer.address}" disabled>
-
+                <label for="address">Address:</label>
+            <input type="text" id="address" value="${customer.address}" disabled>
+                
                                 <label for="nic">NIC:</label>
-                                <input type="text" id="nic" value="${customer.NIC}" disabled>
+            <input type="text" id="nic" value="${customer.NIC}" disabled>
 
-                                <button type="button" class="edit-btn" onclick="enableEdit()">Edit</button>
-                                <button type="button" class="update-btn" onclick="updateProfile()" style="display: none;">Update</button>
-                                <button type="button" class="logout-btn" onclick="logout()">Logout</button>
-                            </form>
-                        </div>
-                    `;
-                }
+            <button type="button" class="edit-btn" onclick="enableEdit()">Edit</button>
+                <button type="button" class="update-btn" onclick="updateProfile()" style="display: none;">Update</button>
+                <button type="button" class="logout-btn" onclick="logout()">Logout</button>
+                </form>
+                </div>
+                            `;
+                    }
 
-                function enableEdit() {
+                    function enableEdit() {
                     document.querySelectorAll("input").forEach(input => input.disabled = false);
                     document.querySelector(".edit-btn").style.display = "none";
-                    document.querySelector(".update-btn").style.display = "inline-block";
-                }
+                            document.querySelector(".update-btn").style.display = "inline-block";
+                    }
 
-                async function updateProfile() {
-                    const updatedCustomer = {
-                        name: document.getElementById("name").value,
-                        email: document.getElementById("email").value,
-                        contact: document.getElementById("contact").value,
-                        address: document.getElementById("address").value,
-                        NIC: document.getElementById("nic").value
-                    };
-
+                            async function updateProfile() {
+                                    const updatedCustomer = {
+                                    name: document.getElementById("name").value,
+                                    email: document.getElementById("email").value,
+                                    contact: document.getElementById("contact").value,
+                            address: document.getElementById("address").value,
+                    NIC: document.getElementById("nic").value                     };
                     try {
-                        const response = await fetch("http://localhost:8080/MegaCityService/resources/customers", {
-                            method: "PUT",
+                            const response = await fetch("http://localhost:8080/MegaCityService/resources/customers", {
+                    method: "PUT",
                             headers: {
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify(updatedCustomer)
-                        });
-
-                        if (response.ok) {
-                            // Update localStorage with the new data
-                            localStorage.setItem("customer", JSON.stringify(updatedCustomer));
-                            alert("Profile updated successfully!");
-
-                            // Disable editing after successful update
-                            document.querySelectorAll("input").forEach(input => input.disabled = true);
-                            document.querySelector(".edit-btn").style.display = "inline-block";
-                            document.querySelector(".update-btn").style.display = "none";
-                        } else {
-                            alert("Failed to update profile. Please try again.");
-                        }
+                            "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(updatedCustomer)
+                    });
+                    if (response.ok) {
+                    // Update localStorage with the new data
+                    localStorage.setItem("customer", JSON.stringify(updatedCustomer));
+                    alert("Profile updated successfully!");
+                    // Disable editing after successful update
+                    document.querySelectorAll("input").forEach(input => input.disabled = true);
+                    document.querySelector(".edit-btn").style.display = "inline-block";
+                    document.querySelector(".update-btn").style.display = "none";
+                    } else {
+                    alert("Failed to update profile. Please try again.");
+                    }
                     } catch (error) {
-                        console.error("Error:", error);
-                        alert("An error occurred. Please try again.");
+                    console.error("Error:", error);
+                    alert("An error occurred. Please try again.");
                     }
                 }
 
                 function logout() {
-                    // Clear any session data or tokens
-                    localStorage.removeItem("customer");
+                            // Clear any session data or tokens
+                            localStorage.removeItem("customer");
                     // Redirect to the login page
                     window.location.href = "signin.html";
                 }
                 function showBooking() {
-                    document.getElementById("main-content").innerHTML = `
+                            document.getElementById("main-content").innerHTML = `
                         <div class="container">
                             <div class="form-grid">
                                 <div class="left-column">
@@ -631,41 +705,39 @@
                             </div>
                         </div>
                     `;
-                        loadCabs(); // Fetch and display cabs
-                        
-                }
-                
-                
-                function loadCabs() {
-                        fetch("http://localhost:8080/MegaCityService/resources/cabs")
-                        .then(response => response.json())
-                       .then(cabs => {
-                        const cabContainer = document.getElementById("cab-cards");
-                                cabContainer.innerHTML = ''; // Clear previous content
-                                cabs.forEach(cab => {
-                                const cabCard = document.createElement("div");
-                                        cabCard.classList.add("cab-card");
-                                   cabCard.innerHTML = `
+                    loadCabs(); // Fetch and display cabs
+
+            }
+            
+        
+        function loadCabs() {
+                            fetch("http://localhost:8080/MegaCityService/resources/cabs")
+                            .then(response => response.json())
+                            .then(cabs => {
+                            const cabContainer = document.getElementById("cab-cards");
+                            cabContainer.innerHTML = ''; // Clear previous content
+                            cabs.forEach(cab => {
+                            const cabCard = document.createElement("div");
+                            cabCard.classList.add("cab-card");
+                            cabCard.innerHTML = `
                                 <i class="fa-solid fa-car"></i>
                                 <h3>${cab.vehicle}</h3>
                                 <p><strong>Driver:</strong> ${cab.driver}</p>
                                 <p><strong>Passengers:</strong> ${cab.passengers}</p>
                             `;
-
                             // Add click event to select the cab
                             cabCard.onclick = function () {
-                                selectCab(cab, cabCard);  // Select and highlight the clicked cab
+                            selectCab(cab, cabCard); // Select and highlight the clicked cab
                             };
-
                             cabContainer.appendChild(cabCard);
-                        });
-                    })
-                    .catch(error => console.error('Error fetching cabs:', error));
+                            });
+                            })
+                            .catch(error => console.error('Error fetching cabs:', error));
                 }
-
+                
                 function selectCab(cab, cabCard) {
-                    // Highlight the selected cab card
-                    const allCabCards = document.querySelectorAll(".cab-card");
+                            // Highlight the selected cab card
+                            const allCabCards = document.querySelectorAll(".cab-card");
                     allCabCards.forEach(card => card.classList.remove("selected")); // Remove "selected" class from all cards
                     cabCard.classList.add("selected"); // Add "selected" class to the clicked card
 
@@ -674,82 +746,81 @@
                     document.getElementById("driver").value = cab.driver;
                     document.getElementById("passengers").value = cab.passengers;
                 }
-            
+                
                 function seePrice() {
-                    const vehicle = document.getElementById("vehicle").value;
-                    const distance = Math.floor(Math.random() * 15) + 1;  // Random distance between 1 and 15 km
+                            const vehicle = document.getElementById("vehicle").value;
+                    const distance = Math.floor(Math.random() * 15) + 1; // Random distance between 1 and 15 km
                     getPricePerKm(vehicle).then(pricePerKm => {
-                        if (pricePerKm > 0) {
-                            const totalPrice = pricePerKm * distance;
-                            document.getElementById("price").value = totalPrice.toFixed(2);  // Display price with two decimal points
-                        } else {
-                            alert("Price per km not found for the selected vehicle.");
-                        }
+                    if (pricePerKm > 0) {
+                    const totalPrice = pricePerKm * distance;
+                    document.getElementById("price").value = totalPrice.toFixed(2); // Display price with two decimal points
+                    } else {
+                    alert("Price per km not found for the selected vehicle.");
+                    }
                     }).catch(error => {
-                        console.error('Error fetching price:', error);
-                        alert("Failed to retrieve price information.");
+                    console.error('Error fetching price:', error);
+                    alert("Failed to retrieve price information.");
                     });
-                }
-
-                function getPricePerKm(vehicle) {
-                    // Fetch the price per km for the selected vehicle type from the backend
-                    return fetch(`http://localhost:8080/MegaCityService/resources/bookings/pricing/${vehicle}`)
-                        .then(response => {
+                            }
+                    
+                    function getPricePerKm(vehicle) {
+                            // Fetch the price per km for the selected vehicle type from the backend
+                            return fetch(`http://localhost:8080/MegaCityService/resources/bookings/pricing/${vehicle}`)
+                            .then(response => {
                             if (!response.ok) {
-                                throw new Error('Price not found');
+                            throw new Error('Price not found');
                             }
                             return response.json();
-                        })
-                        .then(data => data.price_per_km)
-                        .catch(error => {
+                            })
+                            .then(data => data.price_per_km)
+                            .catch(error => {
                             console.error('Error fetching price:', error);
                             return 0; // Return 0 if there's an error
-                        });
-                }
-                
-                function checkAvailability() {
-                    const vehicle = document.getElementById("vehicle").value;
+                            });
+                    }
+                    
+                    function checkAvailability() {
+                            const vehicle = document.getElementById("vehicle").value;
                     const time = document.getElementById("time").value;
                     const confirmBtn = document.getElementById("confirm-btn");
-
                     if (!vehicle || !time) {
-                        alert("Please select a vehicle and enter a time.");
-                        confirmBtn.disabled = true;
-                        return;
+                    alert("Please select a vehicle and enter a time.");
+                    confirmBtn.disabled = true;
+                    return;
                     }
 
                     // Fetch availability from the backend
                     fetch(`http://localhost:8080/MegaCityService/resources/bookings/checkAvailability/${vehicle}/${time}`)
-                        .then(response => response.json())
-                        .then(data => {
+                            .then(response => response.json())
+                            .then(data => {
                             if (data.available) {
-                                alert("The vehicle is available for booking!");
-                                confirmBtn.disabled = false; // Enable confirm button
+                            alert("The vehicle is available for booking!");
+                            confirmBtn.disabled = false; // Enable confirm button
                             } else {
-                                alert("This vehicle is already booked for the selected time. Please choose a different time or vehicle.");
-                                confirmBtn.disabled = true; // Keep confirm button disabled
+                            alert("This vehicle is already booked for the selected time. Please choose a different time or vehicle.");
+                            confirmBtn.disabled = true; // Keep confirm button disabled
                             }
-                        })
-                        .catch(error => {
+                            })
+                            .catch(error => {
                             console.error("Error checking availability:", error);
                             alert("Failed to check availability. Please try again.");
                             confirmBtn.disabled = true; // Keep confirm button disabled
-                        });
-                }
-
-                function confirmBooking() {
-                    // Fetch the current user's details
-                    fetch("http://localhost:8080/MegaCityService/resources/customers/currentUser")
-                        .then(response => response.json())
-                        .then(user => {
+                            });
+                                    }
+                                    
+                                    function confirmBooking() {
+                            // Fetch the current user's details
+                            fetch("http://localhost:8080/MegaCityService/resources/customers/currentUser")
+                            .then(response => response.json())
+                            .then(user => {
                             if (user.message) {
-                                alert("User not logged in. Please log in to book a ride.");
-                                return;
+                            alert("User not logged in. Please log in to book a ride.");
+                            return;
                             }
 
                             // Get values from the form
                             const booking = {
-                                vehicle: document.getElementById("vehicle").value,
+                       vehicle: document.getElementById("vehicle").value,
                                 driver: document.getElementById("driver").value,
                                 passengers: parseInt(document.getElementById("passengers").value),
                                 pickupLocation: document.getElementById("pickup").value,
@@ -843,6 +914,73 @@
                 function printBill() {
                     window.print(); // Print the bill
                 }
+                function showRideHistory() {
+                const customer = JSON.parse(localStorage.getItem("customer"));
+                if (!customer) {
+                    window.location.href = "signin.html"; // Redirect if not logged in
+                    return;
+                }
+
+                const userEmail = customer.email; // Get the logged-in user's email
+
+                document.getElementById("main-content").innerHTML = `
+                    <div class="container">
+                        <h2>Ride History</h2>
+                        <table id="ride-history-table" border="1" cellpadding="10" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Booking ID</th>
+                                    <th>Vehicle</th>
+                                    <th>Driver</th>
+                                    <th>Passengers</th>
+                                    <th>Pickup Location</th>
+                                    <th>Dropoff Location</th>
+                                    <th>Time</th>
+                                    <th>Price (LKR)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ride-history-list">
+                                <!-- Ride history rows will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                loadRideHistory(userEmail); // Fetch and display ride history for the logged-in user
+            }
+
+            function loadRideHistory(userEmail) {
+                fetch("http://localhost:8080/MegaCityService/resources/bookings")
+                    .then(response => response.json())
+                    .then(bookings => {
+                        const rideHistoryList = document.getElementById("ride-history-list");
+                        rideHistoryList.innerHTML = ''; // Clear previous content
+
+                        // Filter bookings for the logged-in user
+                        const userBookings = bookings.filter(booking => booking.customerEmail === userEmail);
+
+                        if (userBookings.length === 0) {
+                            rideHistoryList.innerHTML = `<tr><td colspan="8">No ride history found.</td></tr>`;
+                            return;
+                        }
+
+                        // Populate the table with filtered bookings
+                        userBookings.forEach(booking => {
+                            const bookingRow = document.createElement("tr");
+                            bookingRow.innerHTML = `
+                                <td>${booking.id}</td>
+                                <td>${booking.vehicle}</td>
+                                <td>${booking.driver}</td>
+                                <td>${booking.passengers}</td>
+                                <td>${booking.pickupLocation}</td>
+                                <td>${booking.dropoffLocation}</td>
+                                <td>${booking.time}</td>
+                                <td>${booking.price}</td>
+                            `;
+                            rideHistoryList.appendChild(bookingRow);
+                        });
+                    })
+                    .catch(error => console.error('Error fetching ride history:', error));
+            }
         </script>
     </body>
 </html>
