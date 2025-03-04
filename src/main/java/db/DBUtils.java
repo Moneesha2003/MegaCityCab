@@ -276,7 +276,7 @@ public class DBUtils {
     }
     
     public boolean deleteCabs(String id) {
-        String query = "DELETE FROM customers WHERE email = ?";
+        String query = "DELETE FROM cabs WHERE id = ?";
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS); PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, id);
             int rowsAffected = stmt.executeUpdate();
