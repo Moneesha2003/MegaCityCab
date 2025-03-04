@@ -293,19 +293,60 @@
             loadCabs(); // Fetch and display cabs in the table
             }
 
-        // Function to show the "Manage Bookings" section
-            function showManageBookings() {
-              
-                                            document.getElementById("main-content").innerHTML = `
-                        <div class="container">
-                            <h2>Manage Bookings</h2>
-                            <div id="bookings-list">
-                                <!-- Booking list will be populated here -->
-                            </div>
-                        </div>
-`;
-                                    loadBookings(); // Fetch and display bookings
-                }
+function showManageBookings() {
+    document.getElementById("main-content").innerHTML = `
+        <div class="container">
+            <h2>Manage Bookings</h2>
+            <table id="bookings-table" border="1" cellpadding="10" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Booking ID</th>
+                        <th>Customer Name</th>
+                        <th>Customer Email</th>
+                        <th>Vehicle</th>
+                        <th>Driver</th>
+                        <th>Passengers</th>
+                        <th>Pickup Location</th>
+                        <th>Dropoff Location</th>
+                        <th>Time</th>
+                        <th>Price (LKR)</th>
+                    </tr>
+                </thead>
+                <tbody id="bookings-list">
+                    <!-- Booking rows will be populated here -->
+                </tbody>
+            </table>
+        </div>
+    `;
+    loadBookings(); // Fetch and display bookings
+}
+
+function loadBookings() {
+    fetch("http://localhost:8080/MegaCityService/resources/bookings")
+        .then(response => response.json())
+        .then(bookings => {
+            const bookingsList = document.getElementById("bookings-list");
+            bookingsList.innerHTML = ''; // Clear previous content
+
+            bookings.forEach(booking => {
+                const bookingRow = document.createElement("tr");
+                bookingRow.innerHTML = `
+                    <td>${booking.id}</td>
+                    <td>${booking.customerName}</td>
+                    <td>${booking.customerEmail}</td>
+                    <td>${booking.vehicle}</td>
+                    <td>${booking.driver}</td>
+                    <td>${booking.passengers}</td>
+                    <td>${booking.pickupLocation}</td>
+                    <td>${booking.dropoffLocation}</td>
+                    <td>${booking.time}</td>
+                    <td>${booking.price}</td>
+                `;
+                bookingsList.appendChild(bookingRow);
+            });
+        })
+        .catch(error => console.error('Error fetching bookings:', error));
+}
                                     
             // Function to open the Add Cab modal
             function openAddCabModal() {
@@ -392,29 +433,7 @@
             }
 
                 
-                // Function to load and display bookings
-            function loadBookings() {
-                                    fetch("http://localhost:8080/MegaCityService/resources/bookings")
-                                    .then(response => response.json())
-                                    .then(bookings => {
-                                        const bookingsList = document.getElementById("bookings-list");
-                                        bookingsList.innerHTML = ''; // Clear previous content
-                                        bookings.forEach(booking => {
-                                                const bookingItem = document.createElement("div");
-                                                bookingItem.classList.add("booking-item");
-                                                bookingItem.innerHTML = `
-                <p><strong>Booking ID:</strong> ${booking.id}</p>
-                <p><strong>Customer:</strong> ${booking.customerName}</p>
-                <p><strong>Vehicle:</strong> ${booking.vehicle}</p>
-                <p><strong>Time:</strong> ${booking.time}</p>
-                <button onclick="editBooking(${booking.id})">Edit</button>
-                <button onclick="deleteBooking(${booking.id})">Delete</button>
-            `;
-                                                bookingsList.appendChild(bookingItem);
-                                        });
-                                    })
-                                    .catch(error => console.error('Error fetching bookings:', error));
-                                    }
+               
                             
             function editCab(cabId) {
                                     fetch(`http://localhost:8080/MegaCityService/resources/cabs/${cabId}`)
