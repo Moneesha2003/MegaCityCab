@@ -83,6 +83,7 @@
                 font-size: 2rem;
                 margin-bottom: 15px;
             }
+
             /* Table Styles */
             table {
                 width: 100%;
@@ -145,8 +146,9 @@
             .delete-btn:hover {
                 background-color: #c82333;
             }
-            /* Pop-up Background Overlay */
-            .popup-overlay {
+
+            /* Pop-up Modal Styles */
+            .modal-overlay {
                 position: fixed;
                 top: 0;
                 left: 0;
@@ -160,96 +162,55 @@
                 animation: fadeIn 0.3s ease-in-out;
             }
 
-            /* Pop-up Container */
-            .popup-container {
-                background: #fff; /* Yellow background */
+            .modal {
+                background: white;
                 padding: 25px;
-                width: 420px;
-                border-radius: 12px;
-                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-                text-align: center;
-                position: relative;
+                width: 400px;
+                border-radius: 10px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
                 animation: slideIn 0.3s ease-in-out;
             }
 
-            /* Close Button */
-            .popup-container .close-btn {
-                position: absolute;
-                top: 12px;
-                right: 18px;
-                font-size: 22px;
-                cursor: pointer;
+            .modal h2 {
+                margin-bottom: 20px;
+                font-size: 1.5rem;
                 color: #333;
-                font-weight: bold;
             }
 
-            .popup-container .close-btn:hover {
-                color: #000;
-            }
-
-            /* Form Styles */
-            .popup-container form {
-                display: flex;
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .popup-container label {
-                font-weight: bold;
-                color: #333;
-                font-size: 14px;
-                text-align: left;
-                display: block;
-                margin-bottom: 5px;
-            }
-
-            /* Input Fields */
-            .popup-container input {
-                padding: 10px;
-                border: 1px solid #555;
-                border-radius: 5px;
+            .modal input {
                 width: 100%;
+                padding: 10px;
+                margin-bottom: 15px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
                 font-size: 14px;
-                transition: 0.3s ease-in-out;
             }
 
-            .popup-container input:focus {
-                border-color: #000;
-                box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-                outline: none;
-            }
-
-            /* Buttons */
-            .popup-container button {
-                padding: 12px;
+            .modal button {
+                padding: 10px 20px;
                 border: none;
-                border-radius: 8px;
+                border-radius: 5px;
                 cursor: pointer;
-                font-size: 16px;
-                transition: 0.3s ease-in-out;
-                font-weight: bold;
+                font-size: 14px;
+                margin-right: 10px;
             }
 
-            /* Save Button */
-            .popup-container button[type="submit"] {
-                background: #28a745;
+            .modal button[type="submit"] {
+                background-color: #28a745;
                 color: white;
             }
 
-            .popup-container button[type="submit"]:hover {
-                background: #218838;
-                transform: scale(1.05);
+            .modal button[type="submit"]:hover {
+                background-color: #218838;
             }
 
-            /* Cancel Button */
-            .popup-container button[type="button"] {
-                background: #dc3545;
+            .modal button[type="button"] {
+                background-color: #dc3545;
                 color: white;
             }
 
-            .popup-container button[type="button"]:hover {
-                background: #c82333;
-                transform: scale(1.05);
+            .modal button[type="button"]:hover {
+                background-color: #c82333;
             }
 
             /* Animations */
@@ -289,37 +250,53 @@
         <div class="main-content" id="main-content">
             <h1 id="welcome-msg">Welcome, Admin!</h1>
         </div>
+        
+        <!-- Pop-up Modal for Add Cab -->
+        <div id="addCabModal" class="modal-overlay" style="display: none;">
+            <div class="modal">
+                <h2>Add New Cab</h2>
+                <form id="addCabForm">
+                    <input type="text" id="vehicle" placeholder="Vehicle" required>
+                    <input type="text" id="driver" placeholder="Driver" required>
+                    <input type="number" id="passengers" placeholder="Passengers" required>
+                    <input type="number" id="price_per_km" placeholder="Price per KM" required>
+                    <button type="submit">Submit</button>
+                    <button type="button" onclick="closeAddCabModal()">Cancel</button>
+                </form>
+            </div>
+        </div>
 
         <script>
-                // Function to show the "Manage Cabs" section
-            function showManageCabs() {
-                document.getElementById("main-content").innerHTML = `
-                <div class="container">
+                    // Function to show the "Manage Cabs" section
+                    function showManageCabs() {
+                        document.getElementById("main-content").innerHTML = `
+                                            <div class="container">
                 <h2>Manage Cabs</h2>
-                <button onclick="addNewCab()" class="add-cab-btn">Add New Cab</button>
-                <table id="cabs-table">
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Vehicle</th>
-                    <th>Driver</th>
-                    <th>Passengers</th>
-                    <th>Price per KM</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                <!-- Cab rows will be populated here -->
-                </tbody>
-                </table>
-                </div>
+                <button onclick="openAddCabModal()" class="add-cab-btn">Add New Cab</button>
+            <table id="cabs-table">
+            <thead>
+            <tr>
+            <th>ID</th>
+        <th>Vehicle</th>
+            <th>Driver</th>
+            <th>Passengers</th>
+            <th>Price per KM</th>
+            <th>Actions</th>
+            </tr>
+            </thead>
+        <tbody>
+        <!-- Cab rows will be populated here -->
+            </tbody>
+            </table>
+            </div>
             `;
-                    loadCabs(); // Fetch and display cabs in the table
-                }
-                
-                // Function to show the "Manage Bookings" section
-                function showManageBookings() {
-                    document.getElementById("main-content").innerHTML = `
+            loadCabs(); // Fetch and display cabs in the table
+            }
+
+        // Function to show the "Manage Bookings" section
+            function showManageBookings() {
+              
+                                            document.getElementById("main-content").innerHTML = `
                         <div class="container">
                             <h2>Manage Bookings</h2>
                             <div id="bookings-list">
@@ -327,18 +304,75 @@
                             </div>
                         </div>
 `;
-                    loadBookings(); // Fetch and display bookings
+                                    loadBookings(); // Fetch and display bookings
+                }
+                                    
+            // Function to open the Add Cab modal
+            function openAddCabModal() {
+                document.getElementById("addCabModal").style.display = "flex";
             }
-            
-            // Function to load and display cabs in the table
-                function loadCabs() {
-                            fetch("http://localhost:8080/MegaCityService/resources/cabs")
-                            .then(response => response.json())
-                            .then(cabs => {
-                            const cabsTableBody = document.querySelector("#cabs-table tbody");
-                            cabsTableBody.innerHTML = ''; // Clear previous content
 
-                            cabs.forEach(cab => {
+            // Function to close the Add Cab modal
+            function closeAddCabModal() {
+                document.getElementById("addCabModal").style.display = "none";
+            }
+
+            // Function to handle form submission
+            document.getElementById("addCabForm").addEventListener("submit", function (event) {
+                event.preventDefault(); // Prevent default form submission
+
+                // Get form data
+                const vehicle = document.getElementById("vehicle").value;
+                const driver = document.getElementById("driver").value;
+                const passengers = parseInt(document.getElementById("passengers").value);
+                const price_per_km = parseFloat(document.getElementById("price_per_km").value);
+
+                // Validate input
+                if (!vehicle || !driver || isNaN(passengers) || isNaN(price_per_km)) {
+                    alert("Please fill in all fields correctly.");
+                    return;
+                }
+
+                // Create cab object
+                const cab = {
+                    vehicle: vehicle,
+                    driver: driver,
+                    passengers: passengers,
+                    price_per_km: price_per_km
+                };
+
+                // Send POST request to backend
+                fetch("http://localhost:8080/MegaCityService/resources/cabs", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(cab)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert("Cab added successfully!");
+                        closeAddCabModal(); // Close the modal
+                        loadCabs(); // Refresh the table
+                    } else {
+                        alert("Failed to add cab. Please try again.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error adding cab:", error);
+                    alert("An error occurred while adding the cab.");
+                });
+            });
+
+            // Function to load and display cabs in the table
+            function loadCabs() {
+                fetch("http://localhost:8080/MegaCityService/resources/cabs")
+                    .then(response => response.json())
+                    .then(cabs => {
+                        const cabsTableBody = document.querySelector("#cabs-table tbody");
+                        cabsTableBody.innerHTML = ''; // Clear previous content
+
+                        cabs.forEach(cab => {
                             const row = document.createElement("tr");
                             row.innerHTML = `
                                 <td>${cab.id}</td>
@@ -347,27 +381,28 @@
                                 <td>${cab.passengers}</td>
                                 <td>${cab.price_per_km}</td>
                                 <td>
-                <button class="edit-btn" onclick="editCab(${cab.id})">Edit</button>
-                <button class="delete-btn" onclick="deleteCab(${cab.id})">Delete</button>
-            </td>
-        `;
+                                    <button class="edit-btn" onclick="editCab(${cab.id})">Edit</button>
+                                    <button class="delete-btn" onclick="deleteCab(${cab.id})">Delete</button>
+                                </td>
+                            `;
                             cabsTableBody.appendChild(row);
-                            });
-                            })
-                            .catch(error => console.error('Error fetching cabs:', error));
-                }
-            
-            // Function to load and display bookings
-                function loadBookings() {
-                            fetch("http://localhost:8080/MegaCityService/resources/bookings")
-                            .then(response => response.json())
-                            .then(bookings => {
-                            const bookingsList = document.getElementById("bookings-list");
-                            bookingsList.innerHTML = ''; // Clear previous content
-                            bookings.forEach(booking => {
-                            const bookingItem = document.createElement("div");
-                            bookingItem.classList.add("booking-item");
-                            bookingItem.innerHTML = `
+                        });
+                    })
+                    .catch(error => console.error('Error fetching cabs:', error));
+            }
+
+                
+                // Function to load and display bookings
+            function loadBookings() {
+                                    fetch("http://localhost:8080/MegaCityService/resources/bookings")
+                                    .then(response => response.json())
+                                    .then(bookings => {
+                                        const bookingsList = document.getElementById("bookings-list");
+                                        bookingsList.innerHTML = ''; // Clear previous content
+                                        bookings.forEach(booking => {
+                                                const bookingItem = document.createElement("div");
+                                                bookingItem.classList.add("booking-item");
+                                                bookingItem.innerHTML = `
                 <p><strong>Booking ID:</strong> ${booking.id}</p>
                 <p><strong>Customer:</strong> ${booking.customerName}</p>
                 <p><strong>Vehicle:</strong> ${booking.vehicle}</p>
@@ -375,19 +410,20 @@
                 <button onclick="editBooking(${booking.id})">Edit</button>
                 <button onclick="deleteBooking(${booking.id})">Delete</button>
             `;
-                            bookingsList.appendChild(bookingItem);
-                            });
-                            })
-                            .catch(error => console.error('Error fetching bookings:', error));
-    }
-                function editCab(cabId) {
-                    fetch(`http://localhost:8080/MegaCityService/resources/cabs/${cabId}`)
-                    .then(response => response.json())
-                    .then(cab => {
-                    // Create a pop-up container
-                    const popup = document.createElement("div");
-                    popup.classList.add("popup-overlay");
-                    popup.innerHTML = `
+                                                bookingsList.appendChild(bookingItem);
+                                        });
+                                    })
+                                    .catch(error => console.error('Error fetching bookings:', error));
+                                    }
+                            
+            function editCab(cabId) {
+                                    fetch(`http://localhost:8080/MegaCityService/resources/cabs/${cabId}`)
+                                    .then(response => response.json())
+                                    .then(cab => {
+                                        // Create a pop-up container
+                                        const popup = document.createElement("div");
+                                        popup.classList.add("popup-overlay");
+                                        popup.innerHTML = `
                     <div class="popup-container">
                         <span class="close-btn" onclick="closePopup()">×</span>
                         <h2>Edit Cab</h2>
@@ -414,34 +450,35 @@
                         </form>
                     </div>
                 `;
-                    // Append the pop-up to the body
-                    document.body.appendChild(popup);
-                    // Add event listener for form submission
-                    document.getElementById("edit-cab-form").addEventListener("submit", function (e) {
-                    e.preventDefault();
-                    updateCab(cabId);
-                });
-                })
-                .catch(error => console.error('Error fetching cab details:', error));
-                }
-
-                // Function to close the pop-up
-                function closePopup() {
-                document.querySelector(".popup-overlay").remove();
-                }
-
-                // Function to update the cab in the database
-                function updateCab(cabId) {
-                const cabData = {
-                    id: cabId,
-                    vehicle: document.getElementById("vehicle").value,
-                    driver: document.getElementById("driver").value,
-                    passengers: parseInt(document.getElementById("passengers").value),
-                    price_per_km: parseFloat(document.getElementById("price-per-km").value)
-                };
-
-                fetch(`http://localhost:8080/MegaCityService/resources/cabs`, {
-                    method: 'PUT',
+                                        // Append the pop-up to the body
+                                        document.body.appendChild(popup);
+                                        // Add event listener for form submission
+                                        document.getElementById("edit-cab-form").addEventListener("submit", function (e) {
+                                                e.preventDefault();
+                                                updateCab(cabId);
+                                        });
+                                    })
+                                    .catch(error => console.error('Error fetching cab details:', error));
+                                        }
+                            
+                                        
+                                        // Function to close the pop-up
+                                        function closePopup() {
+                                    document.querySelector(".popup-overlay").remove();
+                                }
+                            
+                                
+                                // Function to update the cab in the database
+                                function updateCab(cabId) {
+                                    const cabData = {
+                                    id: cabId,
+                                            vehicle: document.getElementById("vehicle").value,
+                                            driver: document.getElementById("driver").value,
+                                            passengers: parseInt(document.getElementById("passengers").value),
+                                            price_per_km: parseFloat(document.getElementById("price-per-km").value)
+                            };
+                            fetch(`http://localhost:8080/MegaCityService/resources/cabs`, {
+method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
                     },
@@ -458,28 +495,28 @@
                     .catch(error => console.error('Error updating cab:', error));
                 }
                 function deleteCab(cabId) {
-                // Confirm before deleting
-                if (confirm("Are you sure you want to delete this cab?")) {
-                    // Make a DELETE request to the backend
-                    fetch(`http://localhost:8080/MegaCityService/resources/cabs/${cabId}`, {
-                        method: 'DELETE'
-                    })
-                    .then(response => {
-                        if (response.ok) {
-                            // If the deletion was successful, reload the cabs table
-                            alert("Cab deleted successfully!");
-                            loadCabs(); // Refresh the table
-                        } else {
-                            // Handle errors
-                            alert("Failed to delete cab. Please try again.");
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error deleting cab:', error);
-                        alert("An error occurred while deleting the cab.");
-                    });
+                    // Confirm before deleting
+                    if (confirm("Are you sure you want to delete this cab?")) {
+                        // Make a DELETE request to the backend
+                        fetch(`http://localhost:8080/MegaCityService/resources/cabs/${cabId}`, {
+                            method: 'DELETE'
+                        })
+                        .then(response => {
+                            if (response.ok) {
+                                // If the deletion was successful, reload the cabs table
+                                alert("Cab deleted successfully!");
+                                loadCabs(); // Refresh the table
+                            } else {
+                                // Handle errors
+                                alert("Failed to delete cab. Please try again.");
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error deleting cab:', error);
+                            alert("An error occurred while deleting the cab.");
+                        });
+                    }
                 }
-            }
         </script>
     </body>
 </html>
