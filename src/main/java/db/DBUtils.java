@@ -92,33 +92,32 @@ public class DBUtils {
     }
 
     public boolean updateCustomers(Customer cr) {
-    String query = "UPDATE customers SET name = ?, contact = ?, address = ?, NIC = ? WHERE email = ?";
-    
-    try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-         PreparedStatement stmt = conn.prepareStatement(query)) {
+        String query = "UPDATE customers SET name = ?, contact = ?, address = ?, NIC = ? WHERE email = ?";
 
-        // Set parameters for the prepared statement
-        stmt.setString(1, cr.getName());
-        stmt.setString(2, cr.getContact());
-        stmt.setString(3, cr.getAddress());
-        stmt.setString(4, cr.getNIC());
-        stmt.setString(5, cr.getEmail());
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS); PreparedStatement stmt = conn.prepareStatement(query)) {
 
-        // Execute the update
-        int rowsAffected = stmt.executeUpdate();
+            // Set parameters for the prepared statement
+            stmt.setString(1, cr.getName());
+            stmt.setString(2, cr.getContact());
+            stmt.setString(3, cr.getAddress());
+            stmt.setString(4, cr.getNIC());
+            stmt.setString(5, cr.getEmail());
 
-        // Return true if at least one row was updated
-        return rowsAffected > 0;
+            // Execute the update
+            int rowsAffected = stmt.executeUpdate();
 
-    } catch (SQLException e) {
-        // Log the exception for debugging
-        e.printStackTrace();
-        System.err.println("Error updating customer: " + e.getMessage());
+            // Return true if at least one row was updated
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            // Log the exception for debugging
+            e.printStackTrace();
+            System.err.println("Error updating customer: " + e.getMessage());
+        }
+
+        // Return false if an error occurred
+        return false;
     }
-
-    // Return false if an error occurred
-    return false;
-}
 
     public boolean deleteCustomers(String email) {
         String query = "DELETE FROM customers WHERE email = ?";
@@ -214,19 +213,78 @@ public class DBUtils {
 
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
             while (rs.next()) {
-                ManageCabs cab = new ManageCabs(
-                        rs.getString("vehicle"),
-                        rs.getString("driver"),
-                        rs.getInt("passengers"),
-                        rs.getDouble("price_per_km")
-                );
+                ManageCabs cab = new ManageCabs();
+                cab.setId(rs.getInt("id"));
+                cab.setVehicle(rs.getString("vehicle"));
+                cab.setDriver(rs.getString("driver"));
+                cab.setPassengers(rs.getInt("passengers"));
+                cab.setPrice_per_km(rs.getDouble("price_per_km"));
+
                 cabs.add(cab);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return cabs;
+    }
+
+    public ManageCabs getCab(int id) {
+        String query = "SELECT * FROM cabs WHERE id = ?";
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS); PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new ManageCabs(
+                        rs.getString("vehicle"),
+                        rs.getString("driver"),
+                        rs.getInt("passengers"),
+                        rs.getDouble("price_per_km")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public boolean updateCabs(ManageCabs cab) {
+        String query = "UPDATE cabs SET vehicle = ?, driver = ?, passengers = ?, price_per_km = ? WHERE id = ?";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS); PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            // Set parameters for the prepared statement
+            stmt.setString(1, cab.getVehicle());
+            stmt.setString(2, cab.getDriver());
+            stmt.setInt(3, cab.getPassengers());
+            stmt.setDouble(4, cab.getPrice_per_km());
+            stmt.setInt(5, cab.getId());
+
+            // Execute the update
+            int rowsAffected = stmt.executeUpdate();
+
+            // Return true if at least one row was updated
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            // Log the exception for debugging
+            e.printStackTrace();
+            System.err.println("Error updating cab: " + e.getMessage());
+        }
+
+        // Return false if an error occurred
+        return false;
+    }
+    
+    public boolean deleteCabs(String id) {
+        String query = "DELETE FROM customers WHERE email = ?";
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS); PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, id);
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public double getPricePerKm(String vehicleType) {
